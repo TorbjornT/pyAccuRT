@@ -92,7 +92,24 @@ class pyAccu(object):
         f.close()
 
         return data, nRuns
-    
+
+
+    def createarray(self,direction='down'):
+        '''Return numpy-array with all irradiances. Size of array will be
+        nDepths x nWavelengths x nRuns.'''
+
+        if direction=='up':
+            data = self.updata
+        elif direction == 'down':
+            data = self.downdata
+
+        irrarray = np.ones((self.nDepths,self.nWavelengths,self.nRuns))
+
+        for i in range(self.nRuns):
+            irrarray[:,:,i] = data[i]['irradiances']
+
+        return irrarray
+
 
 
     def plot(self,profile=False,run=1,direction='down'):
