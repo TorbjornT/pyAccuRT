@@ -54,7 +54,6 @@ class pyAccu(object):
 
         up = basefolder + outputfolder + upfile
         down = basefolder + outputfolder + downfile
-        print(up,down)
         
         self.updata, self.nRuns = \
             self.__readIrradiance__(up)
