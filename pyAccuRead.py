@@ -111,6 +111,30 @@ class pyAccu(object):
         return irrarray
 
 
+    def writefile(self,filename='output',type='matlab'):
+        '''type is 'matlab'.
+        Planned: HDF5 and NetCDF.'''
+
+        if type == 'matlab':
+            up = {}
+            down = {}
+
+            up['allirradiances'] = self.createarray('up')
+            down['allirradiances'] = self.createarray('down')
+
+            try:
+                up['runvar'] = self.runvar
+                down['runvar'] = self.runvar
+            except:
+                print('No multirun-data found.')
+            
+
+            for i in range(self.nRuns):
+                up['R{0}'.format(i)] = self.updata[i]
+                down['R{0}'.format(i)] = self.downdata[i]
+
+            sio.savemat('{0}.mat'.format(filename), dict(up=up,down=down))
+
 
     def plot(self,profile=False,run=1,direction='down'):
         if direction=='up':
