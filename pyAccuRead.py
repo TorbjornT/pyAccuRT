@@ -64,6 +64,9 @@ class pyAccu(object):
         self.depths = self.updata[0]['Depths']
         self.nWavelengths = self.updata[0]['nWavelengths']
         self.nDepths = self.updata[0]['nDepths']
+
+        if runvarfile:
+            self.runvar = np.loadtxt(basefolder + runvarfile)
         
 
 
