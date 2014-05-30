@@ -106,21 +106,21 @@ class pyAccu(object):
             fig = plt.figure()
             ax = fig.add_subplot(111)
             ax.plot(data,self.depths)
-            ax.set_xlabel('Wavelength [nm]')
-            ax.set_ylabel('Irradiance [W/m2]')
+            ax.set_ylabel('Depth below TOA [m]')
+            ax.set_xlabel('Irradiance [W/m2]')
             ax.invert_yaxis()
             ax.legend([str(l) for l in self.wavelengths],
                       loc='best',
-                      title='Depth below TOA [m]')
+                      title='Wavelength [nm]')
         else:
             fig = plt.figure()
             ax = fig.add_subplot(111)
             ax.plot(self.wavelengths,data.T)
-            ax.set_xlabel('Irradiance [W/m2]')
-            ax.set_ylabel('Depth below TOA')
+            ax.set_xlabel('Wavelength [nm]]')
+            ax.set_ylabel('Irradiance [W/m2]')
             ax.legend([str(l) for l in self.depths],
                       loc='best',
-                      title='Wavelength [nm]')
+                      title='Depth below TOA [m]')
             
         
         return fig, ax
