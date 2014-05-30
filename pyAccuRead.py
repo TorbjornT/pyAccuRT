@@ -170,3 +170,49 @@ class pyAccu(object):
             
         
         return fig, ax
+
+
+
+    def albedo(self, layer, integrated=False):
+        '''Calculate albedo, return array.'''
+
+        if layer == 'all':
+            incident = self.createarray('down')
+            reflected = self.createarray('up')
+        else:
+            incident = self.createarray('down')[layer,:,:]
+            reflected = self.createarray('up')[layer,:,:]
+
+        a = reflected / incident
+        if integrated:
+            a = np.trapz(a,x=self.wavelengths,axis=1)
+
+        return a
+
+    def transmitted(self, layers, integrated=False):
+        '''Calculate transmittance between levels given by 2-tuple layers.'''
+
+        dat = self.createarray('down')
+        incident = dat[layers[0],:,:]
+        outgoing = dat[layers[1],:,:]
+
+        t = outgoing / incident
+
+        if integrated:
+            t = np.trapz(t,x=self.wavelengths,axis=1)
+
+        return t
+
+    def absorbed(self, layers, integrated=False):
+        
+        down = self.createarray('down')
+        incoming = down[layers[0],:,:]
+        outgoing = down[layers[1],:,:]
+        reflected = self.createarray('up')[layers[1],:,:]
+
+        a = (incoming - outgoing - reflected) / incoming
+
+        if integrated:
+            a = np.trapz(a,x=self.wavelengths,axis=1)
+
+        return a
