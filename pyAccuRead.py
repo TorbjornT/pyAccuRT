@@ -96,5 +96,32 @@ class pyAccu(object):
     
 
 
-    def plot(profile=False,run=1,direction='down'):
-        pass
+    def plot(self,profile=False,run=1,direction='down'):
+        if direction=='up':
+            data = self.updata[run-1]['irradiances']
+        elif direction == 'down':
+            data = self.downdata[run-1]['irradiances']
+
+
+        if profile:
+            fig = plt.figure()
+            ax = fig.add_subplot(111)
+            ax.plot(data,self.depths)
+            ax.set_xlabel('Wavelength [nm]')
+            ax.set_ylabel('Irradiance [W/m2]')
+            ax.invert_yaxis()
+            ax.legend([str(l) for l in self.wavelengths],
+                      loc='best',
+                      title='Depth below TOA [m]')
+        else:
+            fig = plt.figure()
+            ax = fig.add_subplot(111)
+            ax.plot(self.wavelengths,data.T)
+            ax.set_xlabel('Irradiance [W/m2]')
+            ax.set_ylabel('Depth below TOA')
+            ax.legend([str(l) for l in self.depths],
+                      loc='best',
+                      title='Wavelength [nm]')
+            
+        
+        return fig, ax
