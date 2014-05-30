@@ -5,7 +5,7 @@ Class for doing stuff with output from AccuRT.
 import numpy as np
 import matplotlib.pyplot as plt
 from glob import glob
-
+import scipy.io as sio
 
 class pyAccu(object):
     '''Notes to self:
