@@ -115,22 +115,6 @@ class PyAccu(object):
         return nruns, nstreams, ndepths, nwavelengths, depths, wavelengths, irradiances
 
 
-    def createarray(self,direction='down'):
-        '''Return numpy-array with all irradiances. Size of array will be
-        nDepths x nWavelengths x nRuns.'''
-
-        if direction=='up':
-            data = self.updata
-        elif direction == 'down':
-            data = self.downdata
-
-        irrarray = np.ones((self.nDepths,self.nWavelengths,self.nRuns))
-
-        for i in range(self.nRuns):
-            irrarray[:,:,i] = data[i]['irradiances']
-
-        return irrarray
-
 
     def writefile(self,filename='output',output='matlab'):
         '''output is 'matlab'.
@@ -186,11 +170,11 @@ class PyAccu(object):
         '''Calculate albedo, return array.'''
 
         if layer == 'all':
-            incident = self.createarray('down')
-            reflected = self.createarray('up')
+            incident = self.downdata
+            reflected = self.updata
         else:
-            incident = self.createarray('down')[layer,:,:]
-            reflected = self.createarray('up')[layer,:,:]
+            incident = self.downdata[layer,:,:]
+            reflected = self.updata[layer,:,:]
 
         a = reflected / incident
         if integrated:
@@ -201,9 +185,8 @@ class PyAccu(object):
     def transmitted(self, layers, integrated=False):
         '''Calculate transmittance between levels given by 2-tuple layers.'''
 
-        dat = self.createarray('down')
-        incident = dat[layers[0],:,:]
-        outgoing = dat[layers[1],:,:]
+        incident = downdata[layers[0],:,:]
+        outgoing = downdata[layers[1],:,:]
 
         t = outgoing / incident
 
@@ -214,10 +197,9 @@ class PyAccu(object):
 
     def absorbed(self, layers, integrated=False):
         
-        down = self.createarray('down')
-        incoming = down[layers[0],:,:]
-        outgoing = down[layers[1],:,:]
-        reflected = self.createarray('up')[layers[1],:,:]
+        incoming = downdata[layers[0],:,:]
+        outgoing = downdata[layers[1],:,:]
+        reflected = updata[layers[1],:,:]
 
         a = (incoming - outgoing - reflected) / incoming
 
