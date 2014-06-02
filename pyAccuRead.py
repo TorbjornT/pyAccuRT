@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 from glob import glob
 import scipy.io as sio
 
-class pyAccu(object):
+class PyAccu(object):
     '''Notes to self:
      - Input: folder
      - read diffuse/direct/both(?)
