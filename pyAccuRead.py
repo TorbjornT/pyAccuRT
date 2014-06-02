@@ -70,33 +70,41 @@ class PyAccu(object):
         
 
 
-    def __readIrradiance__(self,filename):
+    def readirradiance(self,filename):
         '''Read output textfiles from AccuRT model.
         Return dict with data.'''
 
 
-        f = open(filename,'r')
+        with open(filename,'r') as f:
 
-        nRuns = int(f.readline())
+            # read number of runsm streams, depths, wavelengths
+            # and lists of detector depths, wavelengths
+            nruns = int(f.readline()) 
+            nstreams = int(f.readline())
+            ndepths, nwavelengths = [int(j) for j in f.readline().split()]
+            depths = [float(j) for j in f.readline().split()]
+            wavelengths = [float(j) for j in f.readline().split()]
 
-        data = {}
+            # initiate array for irradiances
+            irradiances = np.empty((ndepths,nwavelengths,nruns))
 
-        for i in range(nRuns):
-            data[i] = {}
-            data[i]['nStreams'] = int(f.readline())
-            dep, wav = [int(j) for j in f.readline().split()]
-            data[i]['nDepths'] = dep
-            data[i]['nWavelengths'] = wav
-            data[i]['Depths'] = [float(j) for j in f.readline().split()]
-            data[i]['Wavelengths'] = [float(j) for j in f.readline().split()]
-            data[i]['irradiances'] = np.empty((dep,wav))
-            for j in range(dep):
-                data[i]['irradiances'][j] = \
+            # read values for first run
+            for j in range(ndepths):
+                irradiances[j,:,0] = \
                     [float(n) for n in f.readline().split()]
 
-        f.close()
+            # read values for rest of runs
+            for i in range(1,nruns):
+                #skip lines with nstreams, ndepths, etc.
+                for k in range(4):
+                    next(f)
+                # read values
+                for j in range(ndepths):
+                    irradiances[j,:,i] = \
+                        [float(n) for n in f.readline().split()]
 
-        return data, nRuns
+
+        return nruns, nstreams, ndepths, nwavelengths, depths, wavelengths, irradiances
 
 
     def createarray(self,direction='down'):
