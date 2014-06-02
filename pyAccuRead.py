@@ -36,14 +36,16 @@ class PyAccu(object):
 
      '''
 
-    def __init__(self,basefolder='',outputfolder=None,mode='diffuse'):
+    def __init__(self,basefolder='./',outputfolder=None,mode='diffuse',
+                 runvarfile=None):
         '''basefolder: where main config file is.
-        outputfolder: by default, folder with 'Output' at the end of the name
+        outputfolder: by default, folder in basefolder with 'Output'
+        at the end of the name
         mode: 'diffuse' (default) or 'direct'
         '''
 
         if not outputfolder:
-            outputfolder = glob('*Output/')[0]
+            outputfolder = glob(basefolder + '*Output/')[0]
 
         if mode == 'diffuse':
             upfile = 'cosine_irradiance_upward.txt'
