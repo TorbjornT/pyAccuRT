@@ -55,18 +55,24 @@ class PyAccu(object):
         up = basefolder + outputfolder + upfile
         down = basefolder + outputfolder + downfile
         
-        self.updata, self.nRuns = \
-            self.__readIrradiance__(up)
-        self.downdata, _  = \
-            self.__readIrradiance__(down)
+        self.nruns, self.nstreams, self.ndepths, self.nwavelengths, \
+            self.depths, self.wavelengths, self.updata = \
+            self.readirradiance(up)
+        *_, self.downdata  = \
+            self.readirradiance(down)
 
-        self.wavelengths = self.updata[0]['Wavelengths']
-        self.depths = self.updata[0]['Depths']
-        self.nWavelengths = self.updata[0]['nWavelengths']
-        self.nDepths = self.updata[0]['nDepths']
 
-        if runvarfile:
+        if isinstance(runvarfile,str):
             self.runvar = np.loadtxt(basefolder + runvarfile)
+        else:
+            try:
+                iterator = iter(runvarfile)
+            except TypeError:
+                self.runvar = 'No multi-run info provided'
+            else:
+                self.runvar = np.array(runvarfile)
+
+
         
 
 
