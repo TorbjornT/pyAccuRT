@@ -136,9 +136,9 @@ class PyAccu(object):
 
     def plot(self,profile=False,run=1,direction='down'):
         if direction=='up':
-            data = self.updata[run-1]['irradiances']
+            data = self.updata[:,:,run-1]
         elif direction == 'down':
-            data = self.downdata[run-1]['irradiances']
+            data = self.downdata[:,:,run-1]
 
 
         if profile:
@@ -155,7 +155,7 @@ class PyAccu(object):
             fig = plt.figure()
             ax = fig.add_subplot(111)
             ax.plot(self.wavelengths,data.T)
-            ax.set_xlabel('Wavelength [nm]]')
+            ax.set_xlabel('Wavelength [nm]')
             ax.set_ylabel('Irradiance [W/m2]')
             ax.legend([str(l) for l in self.depths],
                       loc='best',
@@ -170,40 +170,44 @@ class PyAccu(object):
         '''Calculate albedo, return array.'''
 
         if layer == 'all':
-            incident = self.downdata
-            reflected = self.updata
+            if integrated:
+                a = np.trapz(self.updata / self.downdata, x=self.wavelengths,axis=1)
+            else:
+                a = self.updata / self.downdata
+
         else:
             incident = self.downdata[layer,:,:]
             reflected = self.updata[layer,:,:]
 
-        a = reflected / incident
-        if integrated:
-            a = np.trapz(a,x=self.wavelengths,axis=1)
+            if integrated:
+                a = np.trapz( reflected / incident, x=self.wavelengths, axis=0)
+            else:
+                a = reflected / incident
 
         return a
 
     def transmitted(self, layers, integrated=False):
         '''Calculate transmittance between levels given by 2-tuple layers.'''
 
-        incident = downdata[layers[0],:,:]
-        outgoing = downdata[layers[1],:,:]
+        incident = self.downdata[layers[0],:,:]
+        outgoing = self.downdata[layers[1],:,:]
 
         t = outgoing / incident
 
         if integrated:
-            t = np.trapz(t,x=self.wavelengths,axis=1)
+            t = np.trapz(t,x=self.wavelengths,axis=0)
 
         return t
 
     def absorbed(self, layers, integrated=False):
         
-        incoming = downdata[layers[0],:,:]
-        outgoing = downdata[layers[1],:,:]
-        reflected = updata[layers[1],:,:]
+        incoming = self.downdata[layers[0],:,:]
+        outgoing = self.downdata[layers[1],:,:]
+        reflected = self.updata[layers[1],:,:]
 
         a = (incoming - outgoing - reflected) / incoming
 
         if integrated:
-            a = np.trapz(a,x=self.wavelengths,axis=1)
+            a = np.trapz(a,x=self.wavelengths,axis=0)
 
         return a
