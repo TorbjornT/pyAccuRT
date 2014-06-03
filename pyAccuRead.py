@@ -119,11 +119,12 @@ class PyAccu(object):
 
 
 
-    def writefile(self,filename='output',output='matlab'):
+    def writefile(self,filename,output='matlab'):
         '''output is 'matlab'.
         Planned: HDF5 and NetCDF.'''
 
-        if type == 'matlab':
+
+        if output == 'matlab':
             sio.savemat('{0}.mat'.format(filename),
                         dict(up=self.updata,
                              down=self.downdata,
@@ -133,13 +134,14 @@ class PyAccu(object):
                              nStreams=self.nstreams,
                              wavelengths=self.wavelengths,
                              depths=self.depths,
-                             runvar=self.runvar))
+                             runvar=self.runvar,
+                             modelversion=self.modelversion))
 
-#        elif output == 'netcdf':
-        else:
+        elif output == 'netcdf':
 
             f = sio.netcdf_file(filename + '.nc','w')
-#            f.history('Output from AccuRT model')
+            f.history = 'Output from AccuRT model, ' + self.modelversion
+
 
             f.createDimension('depth', self.ndepths)
             f.createDimension('wavelength', self.nwavelengths)
@@ -154,9 +156,9 @@ class PyAccu(object):
             depths.reference = 'Top of Atmosphere'
             wavelengths[:] = self.wavelengths
             if isinstance(self.runvar,str):
-                runs[:] = np.arange(self.updata.shape[2])
+                multirun[:] = np.arange(self.updata.shape[2])
             else:
-                runs[:] = self.runvar
+                multirun[:] = self.runvar
 
             upward_irradiance = f.createVariable('upward_irradiance','float',
                                           ('depth','wavelength','multirun'))
@@ -208,7 +210,8 @@ class PyAccu(object):
 
         if layer == 'all':
             if integrated:
-                a = np.trapz(self.updata / self.downdata, x=self.wavelengths,axis=1)
+                a = np.trapz(self.updata / self.downdata,
+                             x=self.wavelengths,axis=1)
             else:
                 a = self.updata / self.downdata
 
