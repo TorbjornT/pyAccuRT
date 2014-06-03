@@ -132,6 +132,40 @@ class PyAccu(object):
                              depths=self.depths,
                              runvar=self.runvar))
 
+#        elif output == 'netcdf':
+        else:
+
+            f = sio.netcdf_file(filename + '.nc','w')
+#            f.history('Output from AccuRT model')
+
+            f.createDimension('depth', self.ndepths)
+            f.createDimension('wavelength', self.nwavelengths)
+            f.createDimension('multirun',self.nruns)
+
+            depths = f.createVariable('depths','float32', ('depth',))
+            wavelengths = f.createVariable('wavelength','int32',('wavelength',))
+            multirun = f.createVariable('runvar','float',('multirun',))
+
+            depths[:] = self.depths
+            depths.unit = 'm'
+            depths.reference = 'Top of Atmosphere'
+            wavelengths[:] = self.wavelengths
+            if isinstance(self.runvar,str):
+                runs[:] = np.arange(self.updata.shape[2])
+            else:
+                runs[:] = self.runvar
+
+            upward_irradiance = f.createVariable('upward_irradiance','float',
+                                          ('depth','wavelength','multirun'))
+
+            upward_irradiance[:,:,:] = self.updata
+            downward_irradiance = \
+                f.createVariable('downward_irradiance','float',
+                                 ('depth','wavelength','multirun'))
+
+            downward_irradiance[:,:,:] = self.downdata
+
+            f.close()
 
 
     def plot(self,profile=False,run=1,direction='down'):
