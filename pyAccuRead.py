@@ -74,6 +74,9 @@ class PyAccu(object):
             else:
                 self.runvar = np.array(runvarfile)
 
+        with open(basefolder + outputfolder + 'version.txt','r') as ver:
+            self.modelversion = ver.readline()[:-1]
+
 
         
 
