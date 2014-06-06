@@ -65,7 +65,11 @@ class PyAccu(object):
 
 
         if isinstance(runvarfile,str):
-            self.runvar = np.loadtxt(basefolder + runvarfile)
+            try:
+                self.runvar = np.loadtxt(basefolder + runvarfile)
+            except FileNotFoundError:
+                print('{0} not a valid filename'.format(runvarfile))
+                self.runvar = runvarfile
         else:
             try:
                 iterator = iter(runvarfile)
