@@ -4,7 +4,6 @@ Class for doing stuff with output from AccuRT.
 
 import numpy as np
 import matplotlib.pyplot as plt
-from glob import glob
 import scipy.io as sio
 
 class PyAccu(object):
@@ -27,25 +26,24 @@ class PyAccu(object):
        - default name of outputfolder, be able to specify other name
 
      Example:
-     >>> a = pyAccu('./atmOceanOutput')
+     >>> a = pyAccu('atmOcean')
      >>> a.plot_transmission(layers=(2,4))
      >>> transm = a.transmission(layers=(2,4),integrate=True)
      >>> a.plot()
      >>> a.plot(profile=True)
-     >>> b = pyAccu('./atmoOut',direct=True)
+     >>> b = pyAccu(expname='stuff',direct=True)
 
      '''
 
-    def __init__(self,basefolder='./',outputfolder=None,mode='diffuse',
+    def __init__(self,expname,basefolder='./',mode='diffuse',
                  runvarfile=None):
-        '''basefolder: where main config file is.
-        outputfolder: by default, folder in basefolder with 'Output'
-        at the end of the name
+        '''
+        expname: name of main config file.
+        basefolder: where main config file is.
         mode: 'diffuse' (default) or 'direct'
         '''
 
-        if not outputfolder:
-            outputfolder = glob(basefolder + '*Output/')[0]
+        outputfolder =  expname + 'Output/'
 
         if mode == 'diffuse':
             upfile = 'cosine_irradiance_upward.txt'
@@ -65,7 +63,11 @@ class PyAccu(object):
 
 
         if isinstance(runvarfile,str):
-            self.runvar = np.loadtxt(basefolder + runvarfile)
+            try:
+                self.runvar = np.loadtxt(basefolder + runvarfile)
+            except FileNotFoundError:
+                print('{0} not a valid filename'.format(runvarfile))
+                self.runvar = runvarfile
         else:
             try:
                 iterator = iter(runvarfile)
@@ -94,7 +96,7 @@ class PyAccu(object):
             nstreams = int(f.readline())
             ndepths, nwavelengths = [int(j) for j in f.readline().split()]
             depths = [float(j) for j in f.readline().split()]
-            wavelengths = [float(j) for j in f.readline().split()]
+            wavelengths = np.array([float(j) for j in f.readline().split()])
 
             # initiate array for irradiances
             irradiances = np.empty((ndepths,nwavelengths,nruns))
