@@ -1,0 +1,24 @@
+{
+"PROFILE_LABEL" : "layer_numbering",
+"BRINE_PROFILE " : "1 0.05
+                 2 0.01",
+"BUBBLE_PROFILE" : "1 0.01
+                 2 0.005",
+"BRINE_EFFECTIVE_RADIUS" : "1 100
+                         2 150",
+"BUBBLE_EFFECTIVE_RADIUS" : "1 100
+                          2 200",   
+"IMPURITY_PROFILE" : "1 1e-8
+                   2 1e-7",
+"IMPURITY_IMAG" : "0.4",
+"INTERNAL_MIXING" : "false",
+"USE_HG_PHASE_FUNCTION_OVERRIDE" : "false",  
+"USE_PARAMETERIZED_MIE_CODE" : "true",
+"BRINE_SIZE_DISTRIBUTION_WIDTH" : "1 0.1
+                                2 0.2",
+"BUBBLE_SIZE_DISTRIBUTION_WIDTH" : "1 0.1
+                                 2 0.1",
+"QUADRATURE_POINTS" : "50"
+}
+
+

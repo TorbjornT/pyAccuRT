@@ -1,0 +1,173 @@
+## AccuRT configuration file for ice material ##
+
+# Ice inclusions (brine pockets and air bubbles) are assumed  
+# to consist of a collection of homogeneous spheres with a 
+# single-mode log-normal volume size distribution with a 
+# specified volume mode radius (also called the mean radius  
+# below) and width. The refractive index is based on the 
+# compilation by Warren and Brandt (2008). 
+# Two options are available: (i) a fast parameterization 
+# based on Mie computations (default), and (ii) a complete  
+# Mie computation. Additional absorption is introduced by 
+# adding impurities. 
+
+# See end of the main configuration file for documentation on
+# how to tabulate data.
+
+# NOTES: This ice material shall be included at the top of
+# the lower slab and listed first in the tag, for example
+# MATERIALS_INCLUDED_LOWER_SLAB = ice pure_water
+# so that it controls the spectral variation of the refractive 
+# index of the lower slab. The geometrical thickness of the 
+# ice is an important parameter, which is controlled in the  
+# main configuration file by the LAYER_DEPTHS_LOWER_SLAB tag. 
+# All layer geometrical thicknesses are described by the 
+# two LAYER_DEPTHS tags in the main configuration file.
+
+#------------------------------------------------------------------
+# Configuration options:
+#------------------------------------------------------------------
+
+# The PROFILE_LABEL tag shall be assigned <layer_numbering> or 
+# <depth_numbering> depending on whether to use layer numbering 
+# (counting downward from the top-of-the-lower-slab (TLS)) or  
+# depths in meters (measured downward from the TLS) in the 
+# BRINE_PROFILE, BUBBLE_PROFILE, or IMPURITY_PROFILE tags 
+# defined below. The layer numbering is explained in detail 
+# in the main configuration file below the default values 
+# for the LAYER_DEPTHS_UPPER_SLAB tag. 
+# For example, suppose we wish layers 1 and 2 (counting 
+# downward from the TLS) to contain ice of thickness 0.25 
+# in each layer with brine volume fractions of 0.05 in 
+# layer 1 and 0.01 in layer 2. Then if layer boundaries of 
+# 0.25 and 0.5 have been added to the default layer settings 
+# in the main configuration file by setting 
+# LAYER_DEPTHS_LOWER_SLAB = 0.25 0.5 100, we should specify 
+# the two uppermost layers in the lower slab as follows:
+# PROFILE_LABEL = layer_numbering
+# BRINE_PROFILE  = 1 0.05
+#                  2 0.01
+
+PROFILE_LABEL = layer_numbering
+
+# The BRINE_PROFILE tag shall be assigned the volume fraction of 
+# brines pockets [unitless] versus depth [m], measured downward 
+# from the TLS, or layer number, counting downward from the TLS. 
+# A single value will give a constant volume fraction with depth.
+
+BRINE_PROFILE  = 1 0.05
+                 2 0.01
+
+# The BUBBLE_PROFILE tag shall be assigned the volume fraction of 
+# bubbles [unitless] versus depth [m], measured downward from the 
+# TLS, or layer number, counting downward from the TLS. A single 
+# value will give a constant volume fraction with depth.
+
+BUBBLE_PROFILE = 1 0.01
+                 2 0.005
+
+# The BRINE_EFFECTIVE_RADIUS tag shall be assigned brine effective 
+# radius [microns] versus depth [m] measured downward from the TLS 
+# or layer number, counting downward from the TLS. A single value 
+# will give a constant radius with depth.
+
+BRINE_EFFECTIVE_RADIUS = 1 100
+                         2 150
+
+# The BUBBLE_EFFECTIVE_RADIUS tag shall be assigned bubble effective
+# radius [microns] versus depth [m] measured downward from the TLOS 
+# or layer number, counting downward from the TLS. A single value 
+# will give a constant radius with depth.
+
+BUBBLE_EFFECTIVE_RADIUS = 1 100
+                          2 200
+
+# The IMPURITY_PROFILE tag shall be assigned tabulated ice impurity
+# fractions [unitless] versus depth [m] measured from downward the 
+# TLS or layer number, counting downward from the TOS. The 
+# IMPURITY_PROFILE is the volume fraction of the ice impurities. 
+# A single value will give a constant impurity fraction width with 
+# depth.
+   
+IMPURITY_PROFILE = 1 1e-8
+                   2 1e-7
+
+# The IMPURITY_IMAG tag should be assigned the imaginary part of
+# the impurity refractive index [unitless] versus wavelength [nm]. 
+# A single value will give a constant index with wavelength.
+
+IMPURITY_IMAG = 0.4
+
+# The INTERNAL_MIXING tag shall be set to <true> or <false> depending
+# on whether the ice impurities should be distributed inside or
+# outside brines and bubbles, respectively. The surrounding ice will
+# always have external impurity mixing.
+
+INTERNAL_MIXING = $INTERNAL_MIXING
+
+# The USE_HG_PHASE_FUNCTION_OVERRIDE tag shall be set to 
+# <true> or <false> depending on whether the Heyney-Greenstein
+# (HG) phase function will be used instead of the full Mie phase 
+# function. If the tag is set to <true>, the asymmetry factor 
+# of the HG phase function will be set equal to the first moment 
+# of the Mie phase function, and the HG phase function will be used.
+
+USE_HG_PHASE_FUNCTION_OVERRIDE = $USE_HG_PHASE_FUNCTION_OVERRIDE
+
+# The USE_PARAMETERIZED_MIE_CODE tag shall be assigned <true> or
+# <false> depending on whether to use the parameterizations
+# of the inherent optical properties described in Stamnes
+# et al. JQSRT 2011, or a complete Mie code. Note that the
+# parameterized version uses a Henyey-Greenstein phase function.
+  
+USE_PARAMETERIZED_MIE_CODE = $USE_PARAMETERIZED_MIE_CODE
+
+# The BRINE_SIZE_DISTRIBUTION_WIDTH tag shall be assigned 
+# tabulated brine size distribution widths [unitless] versus 
+# depth [m] measured from the TLS or layer number, counting 
+# from the TLS. A size distribution width is defined as the 
+# standard deviation sigma of the log transformed size 
+# distribution. A single value will give a constant width 
+# with depth. 
+# This width is irrelevant if USE_PARAMETERIZED_MIE_CODE = true.
+# If USE_PARAMETERIZED_MIE_CODE = false, then the mode radius 
+# r_{n} (in number density space) of the lognormal size 
+# distribution will be calculated from the effective grain radius 
+# using the relationship: r_{n} = r_{eff} exp{-2.5 sigma^2}, 
+# between the effective grain radius r_{eff} and the mode 
+# radius r_{n} (see Eq. (25) in Technical notes).
+
+BRINE_SIZE_DISTRIBUTION_WIDTH = 
+$BRINE_SIZE_DISTRIBUTION_WIDTH
+
+# The BUBBLE_SIZE_DISTRIBUTION_WIDTH tag shall be assigned 
+# tabulated bubble size distribution widths [unitless] versus 
+# depth [m] measured from the TLS or layer number, counting 
+# from the TLS. The size distribution width is defined as the 
+# standard deviation sigma of the log transformed size 
+# distribution. A single value will give a constant width 
+# with depth. 
+# This width is irrelevant if USE_PARAMETERIZED_MIE_CODE = true.
+# If USE_PARAMETERIZED_MIE_CODE = false, then the mode radius 
+# r_{n} (in number density space) of the lognormal size 
+# distribution will be calculated from the effective grain radius 
+# using the relationship: r_{n} = r_{eff} exp{-2.5 sigma^2}, 
+# between the effective grain radius r_{eff} and the mode 
+# radius r_{n} (see Eq. (25) in Technical notes).
+
+BUBBLE_SIZE_DISTRIBUTION_WIDTH = 
+$BUBBLE_SIZE_DISTRIBUTION_WIDTH
+
+# The QUADRATURE_POINTS tag shall be assigned the number of
+# quadrature points to be used in the numerical integration of 
+# absorption and scattering coefficients over the particle size 
+# distribution.
+# The number of quadrature points should be an integer greater
+# than 1, and should be set high enough to yield an accurate
+# answer, but not too high to waste computer time.
+# It is not recommended to use less than 50 quadrature points.
+# This tag is only used when USE_PARAMETRIZED_MIE_CODE = false
+
+QUADRATURE_POINTS = $QUADRATURE_POINTS
+
+# End of ice configuration file

@@ -1,0 +1,429 @@
+#                 [ AccuRT main configuration file ]                 
+#
+# Each tag is named with upper case letters and documented immediately
+# above the specification of its default value(s).
+#
+# At the very end of this main configuration file is information on 
+# the tag syntax formats: "list" format and "table" format.
+#
+#                Start of main configuration tags:
+#
+# --------------------------------------------------------------------
+#                       I. INPUT SETTINGS
+# --------------------------------------------------------------------
+#
+#                   [ UPPER BOUNDARY SETTINGS ]
+#
+# The SOURCE_TYPE tag shall be assigned <earth_solar> or
+# <constant_one>, depending on the type of radiation source.
+
+SOURCE_TYPE = 
+$SOURCE_TYPE
+
+# The SOURCE_SCALING_FACTOR tag shall be assigned a number that is to
+# be multiplied with the source output power. For example, such a
+# factor is necessary to account for the variation in the sun-earth
+# distance throughout a year. It is also possible to assign tabulated
+# scaling factors [unitless] versus wavelength [nm]. See "Table
+# format" documentation at the end of this main configuration file
+# for details.
+
+SOURCE_SCALING_FACTOR = $SOURCE_SCALING_FACTOR
+
+# The SOURCE_ZENITH_ANGLE tag shall be assigned the source zenith
+# angle [degrees].
+
+SOURCE_ZENITH_ANGLE = $SOURCE_ZENITH_ANGLE
+
+#                   [ BOTTOM BOUNDARY SETTINGS ]
+#
+# The BOTTOM_BOUNDARY_SURFACE tag shall be assigned <white> or
+# <loamy_sand>. The white surface has a wavelength independent albedo
+# equal to 1.0. Spectral information about loamy_sand can be found at
+# http://speclib.jpl.nasa.gov/.
+
+BOTTOM_BOUNDARY_SURFACE = $BOTTOM_BOUNDARY_SURFACE
+
+# The BOTTOM_BOUNDARY_SURFACE_SCALING_FACTOR tag shall be assigned a
+# number that is to be used to scale the albedo of the bottom. If this
+# tag is assigned the number 0.0, it will yield a black surface. There
+# is no upper limit for this scaling factor, but the resulting surface
+# albedo will be set to 1.0 if the original albedo multiplied with the
+# scaling factor is larger than 1.0. It is also possible to assign
+# tabulated scaling factors [unitless] versus wavelength [nm]. See
+# "Table format" documentation at the end of this configuration file
+# for details.
+
+BOTTOM_BOUNDARY_SURFACE_SCALING_FACTOR = $BOTTOM_BOUNDARY_SURFACE_SCALING_FACTOR
+
+#               [ COMPUTATIONAL POLAR ANGLE SETTINGS ]
+#
+# The STREAM_UPPER_SLAB_SIZE tag shall be assigned the number of
+# computational polar angles (streams) to be used in the upper slab. 
+# At a given wavelength the number of streams in the lower slab will 
+# be obtained from the number of streams in the upper slab as 
+# explained below.
+
+STREAM_UPPER_SLAB_SIZE = $STREAM_UPPER_SLAB_SIZE
+
+# The STREAM_LOWER_SLAB_PARAMETERS tag shall be assigned two
+# parameters k1 and k2, which are used in the equation n = k1 *
+# STREAM_UPPER_SLAB_SIZE * (refractiveIndex)^(k2) determining the
+# number of streams used in the lower slab. If several wavelengths are
+# assigned by the DETECTOR_WAVELENGTHS tag, then the number of streams 
+# in the lower slab is determined from the largest refractive index 
+# within the wavelength range.
+
+STREAM_LOWER_SLAB_PARAMETERS = $STREAM_LOWER_SLAB_PARAMETERS
+
+#                  [ INPUT LAYER DEPTH SETTINGS ]
+#
+# The LAYER_DEPTHS_UPPER_SLAB tag shall be assigned a list of
+# depths [m] from the top of the upper slab at a height of 100 km (0
+# depth) to the height of the lower boundary of each layer in the
+# upper slab.  100 km is taken to be the top-of-the-upper-slab (TUS).
+# There will be one layer for each specified depth as explained in
+# detail below.  In the upper slab all layers have refractive index 
+# equal to 1.0.  The upper slab will be the atmosphere in a coupled 
+# atmosphere-water system. 
+
+
+LAYER_DEPTHS_UPPER_SLAB = 
+$LAYER_DEPTHS_UPPER_SLAB
+
+# As alluded to above, for each depth there is a corresponding 
+# layer number. The counting of layers begins at the top of each 
+# slab. For the layer depths in the upper slab, given as defaults
+# above, the first layer lies between 100.0e3 and 70.0e3 and the
+# second layer lies between 70.0e3 and 50.0e3. Thus, for the 
+# default depths given above the layers in the upper slab become:
+#
+# layer 1: 100.0e3 - 70.0e3 (DEPTH =  30.0e3)
+# layer 2:  70.0e3 - 50.0e3 (DEPTH =  50.0e3)
+# layer 3:  50.0e3 - 40.0e3 (DEPTH =  60.0e3)
+# layer 4:  40.0e3 - 30.0e3 (DEPTH =  70.0e3)
+# layer 5:  30.0e3 - 24.0e3 (DEPTH =  76.0e3)
+# layer 6:  24.0e3 - 20.0e3 (DEPTH =  80.0e3)
+# layer 7:  20.0e3 - 16.0e3 (DEPTH =  84.0e3)
+# layer 8:  16.0e3 - 12.0e3 (DEPTH =  88.0e3)
+# layer 9:  12.0e3 - 10.0e3 (DEPTH =  90.0e3)
+# layer 10: 10.0e3 -  8.0e3 (DEPTH =  92.0e3)
+# layer 11:  8.0e3 -  6.0e3 (DEPTH =  94.0e3)
+# layer 12:  6.0e3 -  4.0e3 (DEPTH =  96.0e3)
+# layer 13:  4.0e3 -  2.0e3 (DEPTH =  98.0e3)
+# layer 14:  2.0e3 -  0.0e3 (DEPTH = 100.0e3)
+
+
+# The LAYER_DEPTHS_LOWER_SLAB tag shall be assigned a list of
+# depths [m] from the top of the lower slab (TLS) (bottom of 
+# the upper slab) at 0 m depth to the depth of the lower 
+# boundary of each layer in the lower slab. This slab will be 
+# the water in a coupled atmosphere-water system. There must 
+# be at least one layer in the lower slab. One depth will give 
+# one layer. Layer numbers will be assigned in a manner similar 
+# to that adopted for the upper slab counting downwards from 
+# the TLS.
+
+LAYER_DEPTHS_LOWER_SLAB = 
+$LAYER_DEPTHS_LOWER_SLAB
+
+
+#                    [ LAYER MATERIAL SETTINGS ]
+#
+# The MATERIALS_INCLUDED_UPPER_SLAB tag shall be assigned a list of
+# materials to be included in the upper slab. Only materials with
+# their own configuration files contained in the material
+# configuration folder can be included. The material profiles
+# versus depth tag in these configuration files will determine how the
+# material is distributed in the different layers specified by the 
+# LAYER_DEPTHS_UPPER_SLAB tag.  For an atmosphere-water system, the 
+# following options are available: 
+# MATERIALS_INCLUDED_UPPER_SLAB = earth_atmospheric_gases
+# if a clear sky (cloud- and aerosol-free) atmosphere is desired, 
+# but if aerosols are also desired, one should set (i)
+# MATERIALS_INCLUDED_UPPER_SLAB = earth_atmospheric_gases aerosols 
+# and if a cloud is desired, one would set (ii)
+# MATERIALS_INCLUDED_UPPER_SLAB = earth_atmospheric_gases cloud 
+# or if both aerosol and cloud materials are desired, one should set (iii)
+# MATERIALS_INCLUDED_UPPER_SLAB = earth_atmospheric_gases aerosols cloud.
+
+MATERIALS_INCLUDED_UPPER_SLAB = $MATERIALS_INCLUDED_UPPER_SLAB
+
+# The MATERIALS_INCLUDED_LOWER_SLAB tag shall be assigned a list of
+# materials to be included in the lower slab. Only materials with
+# their own configuration files contained in the material
+# configuration folder can be included. The material profiles
+# versus depth tag in these configuration files will determine 
+# how the material is distributed in the different layers
+# specified by the LAYER_DEPTHS_LOWER_SLAB tag.  For an
+# atmosphere-water system, the following options are currently 
+# available:
+# MATERIALS_INCLUDED_LOWER_SLAB = pure_water 
+# if clean water (with no impurities) is desired, while the setting
+# MATERIALS_INCLUDED_LOWER_SLAB = pure_water water_impurity_ccrr 
+# should be used in the general case. At present only a single 
+# bio-optical model is included; other bio-optical models will be 
+# added later. NOTE that the refractive index for the lower slab 
+# will be obtained from the first listed material. If vacuum is 
+# listed first, the refractive index of both the lower and upper 
+# slab will be 1.0.
+
+MATERIALS_INCLUDED_LOWER_SLAB = $MATERIALS_INCLUDED_LOWER_SLAB
+
+# --------------------------------------------------------------------
+#                      II. OUTPUT SETTINGS
+# --------------------------------------------------------------------
+#
+#                    [ OUTPUT DEPTH SETTINGS ]
+#
+# The DETECTOR_DEPTHS_UPPER_SLAB tag shall be assigned a list of
+# depths [m] measured from the top of the upper slab (TUS), at which
+# radiative quantities (radiances and irradiances) are to be computed.
+# If the earth atmospheric gases material is included (see the
+# MATERIALS_INCLUDED_UPPER_SLAB tag) the atmosphere bottom will be at
+# a depth of 100,000 m. See also the LAYER_DEPTHS_UPPER_SLAB tag.
+
+DETECTOR_DEPTHS_UPPER_SLAB = $DETECTOR_DEPTHS_UPPER_SLAB
+
+# The DETECTOR_DEPTHS_LOWER_SLAB tag shall be assigned a list of
+# depths [m] measured from the bottom of the upper slab, at which
+# radiative quantities (radiances and irradiances) are to be computed.
+# See also the LAYER_DEPTHS_LOWER_SLAB tag.
+
+DETECTOR_DEPTHS_LOWER_SLAB = $DETECTOR_DEPTHS_LOWER_SLAB
+
+#                   [ DETECTOR ANGLE SETTINGS ]
+#
+# The DETECTOR_AZIMUTH_ANGLES tag shall be assigned a list of detector
+# azimuth angles between -180 and +180 degrees. Light from the
+# direction of the source will be assigned + 180.0 degree azimuth
+# angle. See also the "List format" documentation at the end of this
+# main configuration file. Note, however, that the radiance is 
+# symmetric about 0 since the difference in azimuth is what counts, 
+# e.g.  -20 gives the same result as +20. The DETECTOR_AZIMUTH_ANGLES 
+# tag could also be assigned the value "nan" (not a number) to invoke 
+# computation of azimuth-independent irradiances and azimuthally 
+# averaged radiances. This choice will increase the computational 
+# speed significantly, because in the nadir or zenith direction the 
+# radiances are independent of azimuth. This choice also facilitates 
+# fast computation of irradiances, and hence the remote sensing 
+# reflectance defined as the ratio of the zenith radiance and the 
+# downward irradiance (just above the atmosphere-water interface).
+
+DETECTOR_AZIMUTH_ANGLES = $DETECTOR_AZIMUTH_ANGLES
+
+# The DETECTOR_POLAR_ANGLES tag shall be assigned a list of detector
+# polar angles between 0 and 180 degrees. Light traveling downwards
+# will be detected at angles larger than 90 degrees, and light
+# traveling upwards will be detected at angles smaller than 90
+# degrees. See also the "List format" documentation at the end
+# of this main configuration file.
+
+DETECTOR_POLAR_ANGLES = $DETECTOR_POLAR_ANGLES
+
+#                 [ DETECTOR WAVELENGTH SETTINGS ]
+#
+# The DETECTOR_WAVELENGTHS tag shall be assigned a list of center
+# wavelengths [nm], at which radiative quantities are to be
+# computed. See also the "List format" documentation at the end
+# of this main configuration file.
+
+DETECTOR_WAVELENGTHS = $DETECTOR_WAVELENGTHS
+
+# The DETECTOR_WAVELENGTH_BAND_WIDTHS tag shall be assigned tabulated
+# wavelength band widths [nm] versus wavelength [nm].  See also the
+# "Table format" documentation at the end of this configuration file.
+
+DETECTOR_WAVELENGTH_BAND_WIDTHS = 
+$DETECTOR_WAVELENGTH_BAND_WIDTHS
+
+
+#                  [ OUTPUT IRRADIANCE SETTINGS ]
+#
+# The SAVE_COSINE_IRRADIANCE tag shall be assigned <true> or <false>,
+# depending on whether or not the downward and upward hemispherically-
+# integrated cosine weighted radiances [W/m2/nm] for the specified
+# detector wavelengths and detector depths are to be saved in the 
+# files cosine_irradiance_downward.txt and 
+# cosine_irradiance_upward.txt. Cosine irradiance is commonly 
+# referred to as hemispherical irradiance or plane irradiance. 
+# The cosine irradiance is the hemispherically-integrated energy 
+# incident upon a plane horizontal surface.
+
+SAVE_COSINE_IRRADIANCE = $SAVE_COSINE_IRRADIANCE
+
+# The SAVE_SINE_IRRADIANCE tag shall be assigned <true> or <false>,
+# depending on whether or not the downward and upward hemispherically-
+# integrated sine weighted radiances [W/m2/nm] for the specified
+# detector wavelengths and detector depths are to be saved in the 
+# files sine_irradiance_downward.txt and sine_irradiance_upward.txt. 
+# The sine irradiance is the hemispherically-integrated energy
+# incident upon a vertically oriented cylindrical surface.
+
+SAVE_SINE_IRRADIANCE = SAVE_SINE_IRRADIANCE
+
+# The SAVE_SCALAR_IRRADIANCE tag shall be assigned <true> or <false>,
+# depending on whether or not the downward and upward
+# hemispherically-integrated un-weighted or scalar radiances [W/m2/nm]
+# for the specified detector wavelengths and detector depths are to be
+# saved in the files scalar_irradiance_downward.txt and
+# scalar_irradiance_upward.txt.  The sum of the upward and downward
+# scalar irradiances is sometimes referred to as the actinic flux, and
+# the sum of downward and upward scalar irradiances divided by 4 pi is
+# often referred to as the mean intensity. The scalar irradiance 
+# is the energy incident upon a spherical surface from all directions.
+
+SAVE_SCALAR_IRRADIANCE = $SAVE_SCALAR_IRRADIANCE
+
+#                     [ OUTPUT RADIANCE SETTINGS ]
+#
+# The SAVE_RADIANCE tag shall be assigned <true> or <false>,
+# depending on whether or not the radiance [W/m2/nm/sr] for the 
+# specified detector wavelengths, detector depths, polar angles, 
+# and azimuth angles are to be saved in the file radiance.txt. 
+# Note that computing radiances is considerably more computer 
+# demanding than computing irradiances.
+
+SAVE_RADIANCE = $SAVE_RADIANCE
+
+#                      [ SAVE INPUT SETTINGS ]
+#
+# The SAVE_IOPS tag shall be assigned <true> or <false>, depending on
+# whether or not the inherent optical properties (IOPS) should be
+# saved in the file iops.txt. For each wavelength and layer, the IOPS
+# are the total optical depth, the scattering coefficient, the
+# absorption coefficient, and the moments of the scattering phase
+# function. In addition to these IOPs, the wavelength dependent
+# refractive index of the lower slab is written to a separate file
+# named lower_slab_refractive_index.txt when the SAVE_IOPS tag is set
+# to <true>.
+
+SAVE_IOPS = $SAVE_IOPS
+
+# The SAVE_BOTTOM_BOUNDARY_SURFACE tag shall be assigned <true> or
+# <false>, depending on whether or not the bottom boundary surface
+# albedo for the wavelengths specified by the DETECTOR_WAVELENGTHS
+# tag, are to be saved in the file bottom_boundary_surface.txt.
+
+SAVE_BOTTOM_BOUNDARY_SURFACE = $SAVE_BOTTOM_BOUNDARY_SURFACE
+
+# The SAVE_MATERIAL_PROFILE tag shall be assigned <true> or <false>,
+# depending on whether or not a list of included materials with
+# corresponding concentrations are to be saved in the file
+# material_profile.txt. Inspection of the saved material_profile.txt
+# will make it easier to determine whether the layer structure is 
+# adequate and whether the material concentration profiles have been 
+# properly adjusted to the layer structure.
+
+SAVE_MATERIAL_PROFILE = $SAVE_MATERIAL_PROFILE
+
+# The PROFILE_OUTPUT_WAVELENGTH tag shall be assigned the reference
+# wavelength [nm] where the material profile IOPs should be listed.
+
+PROFILE_OUTPUT_WAVELENGTH = $PROFILE_OUTPUT_WAVELENGTH
+
+#                       [ VERBOSITY SETTINGS ]
+#
+# The PRINT_PROGRESS_TO_SCREEN tag shall be assigned <true> or 
+# <false>, depending on whether or not the step-by-step calculation 
+# progress is to be displayed.
+
+PRINT_PROGRESS_TO_SCREEN = $PRINT_PROGRESS_TO_SCREEN
+
+#                       [ REPEAT RUN SETTING ]
+#
+# The REPEATED_RUN_SIZE tag shall be assigned an integer larger than
+# zero, which determines the number of times AccuRT will be run. For
+# each run varying tag values may be read from a text file or drawn
+# randomly as follows:
+#
+# File value assignment:
+# Specify the name of the text file, which must end with .txt, for
+# example like this:
+#
+# SOURCE_ZENITH_ANGLE = source_zenith_angle.txt 
+#
+# The values in the source_zenith_angle.txt file should be in separate
+# rows. A new row will then be read for each run. The reading will 
+# continue from the top of the file if the repeated run size is larger 
+# than the number of rows. The input text files should be stored in
+# the same folder as the configuration files.
+#
+# Random assignment:
+# If a value is followed by a probability distribution type and a 
+# width, new tag values will be randomly drawn for each repeated run, 
+# in accordance with the given probability distribution, where the
+# first tag value is considered to be the mean value of the
+# distribution. For example: 
+#
+# SOURCE_SCALING_FACTOR = 1.0 uniformly distributed with width 0.2
+#
+# will distribute the source scaling factor uniformly from 0.8 to
+# 1.2. Currently, "uniformly" and "loguniformly" are the only 
+# distributions implemented. 
+#
+# The output radiometric quantities are appended to their output
+# files at each run. And for random assignment the drawn values are
+# also saved in separate files named with the tag name.
+#
+# The repeated run size option is particularly useful when making
+# look-up tables and training ensembles for neural networks.
+
+REPEATED_RUN_SIZE = $REPEATED_RUN_SIZE
+
+#                   End of main configuration tags
+#_____________________________________________________________________
+
+
+######################### TAG syntax formats #########################
+#
+#---------------------------------------------------------------------
+#                            List format 
+#---------------------------------------------------------------------
+# A list of numbers may be assigned to a tag in two different ways:
+#
+# 1) TAG = <value_1> <value_2> ... <value_n> 
+#
+# Example: 
+#
+# DETECTOR_DEPTHS = 0 50e3 90e3 99999
+#
+# 2) TAG = <value_1>:<step>:<value_n> 
+#
+# Here the list starts with the number <value_1>, and the other numbers
+# are <value_1> + <step>, <value_1> + 2*<step>,…, <value_1> + n*<step>
+#
+# Example:
+#
+# DETECTOR_AZIMUTH_ANGLES = -180:20:180
+#
+# A list may contain only one element.
+#
+#---------------------------------------------------------------------
+#                            Table format 
+#---------------------------------------------------------------------
+# Tabulated numbers, i.e. a list of x-values with corresponding
+# y-values, may be assigned to a tag in this manner:
+#
+# TAG = <x1> <y1> 
+#       <x2> <y2> 
+#        ... 
+#       <xn> <yn>
+#  
+# Unless otherwise specified, y-values corresponding to x-values in
+# between the tabulated points are found by linear interpolation. 
+# A table may be assigned only one y-value, which will make it 
+# constant.
+#
+# Example: 
+#
+# Band widths of 1.0, 1.5, and 3.0 nm may be specified at the center
+# wavelengths 400, 500, and 700 nm in this manner:
+#
+# DETECTOR_WAVELENGTH_BAND_WIDTHS = 400 1.0  
+#  	 	                     500 1.5
+#                                   700 3.0
+# 
+# With this table, the wavelength band width at, say 450 nm, will 
+# be 1.25, obtained by linear interpolation.
+#_____________________________________________________________________
