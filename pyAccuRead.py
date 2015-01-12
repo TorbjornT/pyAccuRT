@@ -43,7 +43,7 @@ class PyAccu(object):
         mode: 'diffuse' (default) or 'direct'
         '''
 
-        outputfolder = basefolder + exname + 'Output/'
+        outputfolder =  expname + 'Output/'
 
         if mode == 'diffuse':
             upfile = 'cosine_irradiance_upward.txt'
@@ -96,7 +96,7 @@ class PyAccu(object):
             nstreams = int(f.readline())
             ndepths, nwavelengths = [int(j) for j in f.readline().split()]
             depths = [float(j) for j in f.readline().split()]
-            wavelengths = [float(j) for j in f.readline().split()]
+            wavelengths = np.array([float(j) for j in f.readline().split()])
 
             # initiate array for irradiances
             irradiances = np.empty((ndepths,nwavelengths,nruns))
