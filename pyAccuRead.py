@@ -103,7 +103,7 @@ class PyAccu(object):
             nruns = int(f.readline()) 
             nstreams = int(f.readline())
             ndepths, nwavelengths = [int(j) for j in f.readline().split()]
-            depths = [float(j) for j in f.readline().split()]
+            depths = np.array([float(j) for j in f.readline().split()])
             wavelengths = np.array([float(j) for j in f.readline().split()])
 
             # initiate array for irradiances
