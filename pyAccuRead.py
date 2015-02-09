@@ -36,7 +36,7 @@ class PyAccu(object):
      '''
 
     def __init__(self,expname,basefolder='./',mode='diffuse',
-                 runvarfile=None, scalar=False,readiops=False):
+                 runvarfile=None, scalar=False,read_iops=False):
         '''
         expname: name of main config file.
         basefolder: where main config file is.
@@ -87,7 +87,7 @@ class PyAccu(object):
         with open(basefolder + outputfolder + 'version.txt','r') as ver:
             self.modelversion = ver.readline()[:-1]
 
-        if readiops:
+        if read_iops:
             self.iops = readiops()
 
 
