@@ -156,8 +156,8 @@ class PyAccu(object):
             for i in range(nRuns):
                 nLayerDepths, nWavelengths, nPhaseMoments = [int(x) for x in f.readline().split()]
 
-                LayerDepths.append(np.array(f.readline()))
-                Wavelengths.append(np.array(f.readline()))
+                LayerDepths.append(np.array([float(x) for x in f.readline().split()]))
+                Wavelengths.append(np.array([float(x) for x in f.readline().split()]))
 
                 for j in range(nLayerDepths):
                     for k in range(nWavelengths):
