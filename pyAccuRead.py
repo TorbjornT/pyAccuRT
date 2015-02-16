@@ -36,7 +36,7 @@ class PyAccu(object):
      '''
 
     def __init__(self,expname,basefolder='./',mode='diffuse',
-                 runvarfile=None):
+                 runvarfile=None,scalar=False):
         '''
         expname: name of main config file.
         basefolder: where main config file is.
@@ -67,6 +67,14 @@ class PyAccu(object):
             self.readirradiance(downdir)
         *_, self.updirect  = \
             self.readirradiance(updir)
+
+        if scalar:
+            supfile = 'scalar_irradiance_upward.txt'
+            sdownfile = 'scalar_irradiance_downward.txt'
+
+            *_, self.scalar_down = self.readirradiance(basefolder + outputfolder + sdownfile)
+            *_, self.scalar_up = self.readirradiance(basefolder + outputfolder + supfile)
+
 
 
         if isinstance(runvarfile,str):
