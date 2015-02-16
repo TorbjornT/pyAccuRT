@@ -56,8 +56,8 @@ class PyAccu(object):
         updiff = basefolder + outputfolder + up_diffuse
         downdiff = basefolder + outputfolder + down_diffuse
         
-        updir = basefolder + outputfolder + up_diffuse
-        downdir = basefolder + outputfolder + down_diffuse
+        updir = basefolder + outputfolder + up_direct
+        downdir = basefolder + outputfolder + down_direct
         
         self.nruns, self.nstreams, self.ndepths, self.nwavelengths, \
             self.depths, self.wavelengths, self.updiffuse = \
