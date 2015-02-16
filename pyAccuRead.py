@@ -35,12 +35,11 @@ class PyAccu(object):
 
      '''
 
-    def __init__(self,expname,basefolder='./',mode='diffuse',
+    def __init__(self,expname,basefolder='./',direct=False,
                  runvarfile=None, scalar=False,read_iops=False):
         '''
         expname: name of main config file.
         basefolder: where main config file is.
-        mode: 'diffuse' (default) or 'direct'
         '''
 
         outputfolder =  expname + 'Output/'
@@ -50,24 +49,26 @@ class PyAccu(object):
         up_diffuse = 'cosine_irradiance_upward.txt'
         down_diffuse = 'cosine_irradiance_downward.txt'
 
-        up_direct = 'cosine_irradiance_direct_upward.txt'
-        down_direct = 'cosine_irradiance_direct_downward.txt'
-
         updiff = basefolder + outputfolder + up_diffuse
         downdiff = basefolder + outputfolder + down_diffuse
-        
-        updir = basefolder + outputfolder + up_direct
-        downdir = basefolder + outputfolder + down_direct
+
         
         self.nruns, self.nstreams, self.ndepths, self.nwavelengths, \
-            self.depths, self.wavelengths, self.updiffuse = \
+            self.depths, self.wavelengths, self.updata = \
             self.readirradiance(updiff)
-        *_, self.downdiffuse  = \
+        *_, self.downdata  = \
             self.readirradiance(downdiff)
-        *_, self.downdirect  = \
-            self.readirradiance(downdir)
-        *_, self.updirect  = \
-            self.readirradiance(updir)
+
+        if direct:
+            up_direct = 'cosine_irradiance_direct_upward.txt'
+            down_direct = 'cosine_irradiance_direct_downward.txt'
+        
+            updir = basefolder + outputfolder + up_direct
+            downdir = basefolder + outputfolder + down_direct
+            *_, self.downdirect  = \
+                self.readirradiance(downdir)
+            *_, self.updirect  = \
+                self.readirradiance(updir)
 
         if scalar:
             supfile = 'scalar_irradiance_upward.txt'
