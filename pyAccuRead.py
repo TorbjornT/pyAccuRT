@@ -36,7 +36,7 @@ class PyAccu(object):
      '''
 
     def __init__(self,expname,basefolder='./',mode='diffuse',
-                 runvarfile=None,scalar=False):
+                 runvarfile=None, scalar=False,read_iops=False):
         '''
         expname: name of main config file.
         basefolder: where main config file is.
@@ -44,6 +44,7 @@ class PyAccu(object):
         '''
 
         outputfolder =  expname + 'Output/'
+
 
 
         up_diffuse = 'cosine_irradiance_upward.txt'
@@ -94,6 +95,10 @@ class PyAccu(object):
         with open(basefolder + outputfolder + 'version.txt','r') as ver:
             self.modelversion = ver.readline()[:-1]
 
+        if read_iops:
+            filename = basefolder + outputfolder + 'iops.txt'
+            self.iops = self.readiops(filename)
+
 
         
 
@@ -110,7 +115,7 @@ class PyAccu(object):
             nruns = int(f.readline()) 
             nstreams = int(f.readline())
             ndepths, nwavelengths = [int(j) for j in f.readline().split()]
-            depths = [float(j) for j in f.readline().split()]
+            depths = np.array([float(j) for j in f.readline().split()])
             wavelengths = np.array([float(j) for j in f.readline().split()])
 
             # initiate array for irradiances
@@ -134,6 +139,60 @@ class PyAccu(object):
 
         return nruns, nstreams, ndepths, nwavelengths, depths, wavelengths, irradiances
 
+    def readiops(self,filename):
+        '''Read iops.txt.'''
+
+
+        with open(filename,'r') as f:
+            nRuns = int(f.readline())
+            nLayerDepths, nWavelengths, nPhaseMoments = [int(x) for x in f.readline().split()]
+
+            totalOpticalDepth = np.empty((nLayerDepths,nWavelengths))
+            absorptionCoefficients = np.empty((nLayerDepths,nWavelengths))
+            scatteringCoefficients = np.empty((nLayerDepths,nWavelengths))
+            scatteringScalingFactors = np.empty((nLayerDepths,nWavelengths))
+            phaseMoments = np.empty((nLayerDepths,nWavelengths,nPhaseMoments))
+
+            
+        with open(filename,'r') as f:
+            nRuns = int(f.readline())
+
+            LayerDepths = []
+            Wavelengths = []
+
+            for i in range(nRuns):
+                nLayerDepths, nWavelengths, nPhaseMoments = [int(x) for x in f.readline().split()]
+
+                LayerDepths.append(np.array(f.readline()))
+                Wavelengths.append(np.array(f.readline()))
+
+                for j in range(nLayerDepths):
+                    for k in range(nWavelengths):
+                        d = f.readline().split()
+                        totalOpticalDepth[j,k] = float(d.pop(0))
+                        absorptionCoefficients[j,k] = float(d.pop(0))
+                        scatteringCoefficients[j,k] = float(d.pop(0))
+                        scatteringScalingFactors[j,k] = float(d.pop(0))
+                        phaseMoments[j,k,:] = [float(k) for k in d]
+
+
+            iops = dict(nRuns=nRuns,
+                        nLayerDepths = nLayerDepths,
+                        nWaveLenghts = nWavelengths,
+                        nPhaseMoments = nPhaseMoments,
+                        LayerDepths = LayerDepths,
+                        Wavelengths = Wavelengths,
+                        totalOpticalDepth = totalOpticalDepth,
+                        absorptionCoefficients = absorptionCoefficients,
+                        scatteringCoefficients = scatteringCoefficients,
+                        scatteringScalingFactors = scatteringScalingFactors,
+                        phaseMoments = phaseMoments)
+
+            return iops
+                        
+
+                
+            
 
 
     def writefile(self,filename,output='matlab'):
