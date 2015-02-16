@@ -45,21 +45,28 @@ class PyAccu(object):
 
         outputfolder =  expname + 'Output/'
 
-        if mode == 'diffuse':
-            upfile = 'cosine_irradiance_upward.txt'
-            downfile = 'cosine_irradiance_downward.txt'
-        elif mode == 'direct':
-            upfile = 'cosine_irradiance_direct_upward.txt'
-            downfile = 'cosine_irradiance_direct_downward.txt'
 
-        up = basefolder + outputfolder + upfile
-        down = basefolder + outputfolder + downfile
+        up_diffuse = 'cosine_irradiance_upward.txt'
+        down_diffuse = 'cosine_irradiance_downward.txt'
+
+        up_direct = 'cosine_irradiance_direct_upward.txt'
+        down_direct = 'cosine_irradiance_direct_downward.txt'
+
+        updiff = basefolder + outputfolder + up_diffuse
+        downdiff = basefolder + outputfolder + down_diffuse
+        
+        updir = basefolder + outputfolder + up_diffuse
+        downdir = basefolder + outputfolder + down_diffuse
         
         self.nruns, self.nstreams, self.ndepths, self.nwavelengths, \
-            self.depths, self.wavelengths, self.updata = \
-            self.readirradiance(up)
-        *_, self.downdata  = \
-            self.readirradiance(down)
+            self.depths, self.wavelengths, self.updiffuse = \
+            self.readirradiance(updiff)
+        *_, self.downdiffuse  = \
+            self.readirradiance(downdiff)
+        *_, self.downdirect  = \
+            self.readirradiance(downdir)
+        *_, self.updirect  = \
+            self.readirradiance(updir)
 
 
         if isinstance(runvarfile,str):
