@@ -35,23 +35,41 @@ class PyAccu(object):
 
      '''
 
-    def __init__(self,expname,basefolder='./',mode='diffuse',
+    def __init__(self,expname,basefolder='./',direct=False,
                  runvarfile=None, scalar=False,read_iops=False):
 
         '''
         expname: name of main config file.
         basefolder: where main config file is.
-        mode: 'diffuse' (default) or 'direct'
         '''
 
         outputfolder =  expname + 'Output/'
 
-        if mode == 'diffuse':
-            upfile = 'cosine_irradiance_upward.txt'
-            downfile = 'cosine_irradiance_downward.txt'
-        elif mode == 'direct':
-            upfile = 'cosine_irradiance_direct_upward.txt'
-            downfile = 'cosine_irradiance_direct_downward.txt'
+
+
+        up_diffuse = 'cosine_irradiance_upward.txt'
+        down_diffuse = 'cosine_irradiance_downward.txt'
+
+        updiff = basefolder + outputfolder + up_diffuse
+        downdiff = basefolder + outputfolder + down_diffuse
+
+        
+        self.nruns, self.nstreams, self.ndepths, self.nwavelengths, \
+            self.depths, self.wavelengths, self.updata = \
+            self.readirradiance(updiff)
+        *_, self.downdata  = \
+            self.readirradiance(downdiff)
+
+        if direct:
+            up_direct = 'cosine_irradiance_direct_upward.txt'
+            down_direct = 'cosine_irradiance_direct_downward.txt'
+        
+            updir = basefolder + outputfolder + up_direct
+            downdir = basefolder + outputfolder + down_direct
+            *_, self.downdirect  = \
+                self.readirradiance(downdir)
+            *_, self.updirect  = \
+                self.readirradiance(updir)
 
         if scalar:
             supfile = 'scalar_irradiance_upward.txt'
@@ -60,15 +78,6 @@ class PyAccu(object):
             *_, self.scalar_down = self.readirradiance(basefolder + outputfolder + sdownfile)
             *_, self.scalar_up = self.readirradiance(basefolder + outputfolder + supfile)
 
-
-        up = basefolder + outputfolder + upfile
-        down = basefolder + outputfolder + downfile
-        
-        self.nruns, self.nstreams, self.ndepths, self.nwavelengths, \
-            self.depths, self.wavelengths, self.updata = \
-            self.readirradiance(up)
-        *_, self.downdata  = \
-            self.readirradiance(down)
 
 
         if isinstance(runvarfile,str):
