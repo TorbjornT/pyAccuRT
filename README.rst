@@ -10,6 +10,8 @@ Readme
  - writing data to Matlab- or NetCDF-file.
 
 Documentation is either non-existent or incomplete.
-That may change sometime.
-   
-Licensed under the MIT License.
+That may change at some point. Perhaps.
+
+AccuRT is a registered trademark of Geminor Inc. in the United States.
+
+The code in this repository is licensed under the MIT License.
