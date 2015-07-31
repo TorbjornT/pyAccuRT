@@ -6,11 +6,16 @@ Readme
 
  - reading output from AccuRT
  - creating simple plots
- - calculating albedo, transmittance, absorbance
+ - calculating albedo, transmittance
  - writing data to Matlab- or NetCDF-file.
 
-Documentation is either non-existent or incomplete.
-That may change at some point. Perhaps.
+Dependencies:
+
+ - `python` 3.x (only tested in my working environment, `python` 3.4) 
+ - `numpy`
+ - `matplotlib`
+ - `scipy` (`scipy.io.savemat` used to save as Matlab `.mat`)
+
 
 AccuRT is a registered trademark of Geminor Inc. in the United States.
 
