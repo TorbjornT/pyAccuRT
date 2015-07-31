@@ -8,45 +8,45 @@ import scipy.io as sio
 import os
 
 class PyAccu(object):
-    '''Notes to self:
-     - Input: folder
-     - read diffuse/direct/both(?)
-     - self: data-blob
-     - methods:
-       - plot profiles
-       - calculate transmission etc. between given layers
-         return values.
-         - integrated or lambda dependent
-         - plot if desired
-       - write netCDF/HDF5
-       - return numpy-array
-       - read e.g. solar_zenith_angle.txt
-         - have data as pandas dataframe? use sza as index?
-         - (kanskje like greit aa droppe det?)
-     - assume top level folder (where main config file is)
-       - default name of outputfolder, be able to specify other name
+    '''Reads the output text files from AccuRT, and includes methods for
+    calculating albedo and transmittance, and for simple plotting.
+
+    Assumes that the number of detector depths and wavelengths
+    does *not* change when using repeated runs.
+
+    Positional argument:
+
+    expname -- Name of the main config file.
+
+    Keyword arguments:
+
+    basefolder -- Folder where the main configfile is located.
+        Default './'.
+
+    direct -- Boolean. If True, read in the direct irradiance in addition
+        to the diffuse. Default False.
+
+    runvarfile -- Filename or list-like structure holding indices for repeated
+        runs. Default None.
+
+    scalar -- Boolean. If True, read in scalar irradiance in addition to
+        diffuse irradiance. Default False.
+
+    iops -- Boolean. If True, read in iops-file into a dict. Default False.
+
 
      Example:
      >>> a = pyAccu('atmOcean')
-     >>> a.plot_transmission(layers=(2,4))
-     >>> transm = a.transmission(layers=(2,4),integrate=True)
+     >>> transm = a.transmittance(layers=(2,4),integrated=True)
      >>> a.plot()
      >>> a.plot(profile=True)
-     >>> b = pyAccu(expname='stuff',direct=True)
-
      '''
 
     def __init__(self,expname,basefolder='./',direct=False,
-                 runvarfile=None, scalar=False,read_iops=False):
-
-        '''
-        expname: name of main config file.
-        basefolder: where main config file is.
-        '''
+                 runvarfile=None, scalar=False,iops=False):
+        '''See PyAccu for description of arguments.'''
 
         outputfolder =  expname + 'Output/'
-
-
 
         up_diffuse = 'cosine_irradiance_upward.txt'
         down_diffuse = 'cosine_irradiance_downward.txt'
@@ -107,8 +107,9 @@ class PyAccu(object):
 
 
     def readirradiance(self,filename):
-        '''Read output textfiles from AccuRT model.
-        Return dict with data.'''
+        '''Read output irradiance textfiles from AccuRT model.
+        Returns number of runs, streams, detector depths and wavelengths,
+        and numpy arrays of depths, wavelengths and irradiance'''
 
 
         with open(filename,'r') as f:
@@ -143,7 +144,7 @@ class PyAccu(object):
         return nruns, nstreams, ndepths, nwavelengths, depths, wavelengths, irradiances
 
     def readiops(self,filename):
-        '''Read iops.txt.'''
+        '''Read iops.txt, returns dict.'''
 
 
         with open(filename,'r') as f:
@@ -199,8 +200,7 @@ class PyAccu(object):
 
 
     def writefile(self,filename,output='matlab'):
-        '''output is 'matlab'.
-        Planned: HDF5 and NetCDF.'''
+        '''output is 'matlab' or 'netcdf'.'''
 
 
         if output == 'matlab':
@@ -253,6 +253,7 @@ class PyAccu(object):
 
 
     def plot(self,profile=False,run=1,direction='down'):
+        
         if direction=='up':
             data = self.updata[:,:,run-1]
         elif direction == 'down':
