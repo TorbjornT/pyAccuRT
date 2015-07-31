@@ -290,8 +290,8 @@ class PyAccu(object):
 
         if layer == 'all':
             if integrated:
-                a = np.trapz(self.updata / self.downdata,
-                             x=self.wavelengths,axis=1)
+                a = np.trapz(self.updata,x = self.wavelengths,axis=1)/\
+                    np.trapz(self.downdata,x=self.wavelengths,axis=1)
             else:
                 a = self.updata / self.downdata
 
@@ -300,34 +300,24 @@ class PyAccu(object):
             reflected = self.updata[layer,:,:]
 
             if integrated:
-                a = np.trapz( reflected / incident, x=self.wavelengths, axis=0)
+                a = np.trapz(reflected,x = self.wavelengths,axis=1)/\
+                    np.trapz(incident,x=self.wavelengths,axis=1)
             else:
                 a = reflected / incident
 
         return a
 
-    def transmitted(self, layers, integrated=False):
+    def transmittance(self, layers, integrated=False):
         '''Calculate transmittance between levels given by 2-tuple layers.'''
 
         incident = self.downdata[layers[0],:,:]
         outgoing = self.downdata[layers[1],:,:]
 
-        t = outgoing / incident
-
         if integrated:
-            t = np.trapz(t,x=self.wavelengths,axis=0)
+            t = np.trapz(outgoing,x=self.wavelengths,axis=0)/\
+                np.trapz(incident,x=self.wavelengths,axis=0)
+        else:
+            t = outgoing / incident
 
         return t
 
-    def absorbed(self, layers, integrated=False):
-        
-        incoming = self.downdata[layers[0],:,:]
-        outgoing = self.downdata[layers[1],:,:]
-        reflected = self.updata[layers[1],:,:]
-
-        a = (incoming - outgoing - reflected) / incoming
-
-        if integrated:
-            a = np.trapz(a,x=self.wavelengths,axis=0)
-
-        return a
