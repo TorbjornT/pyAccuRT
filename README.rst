@@ -2,7 +2,7 @@
 Readme
 ========
 
-`PyAccu` class is for
+``PyAccu`` class is for
 
  - reading output from AccuRT
  - creating simple plots
@@ -11,10 +11,10 @@ Readme
 
 Dependencies:
 
- - `python` 3.x (only tested in my working environment, `python` 3.4) 
- - `numpy`
- - `matplotlib`
- - `scipy` (`scipy.io.savemat` used to save as Matlab `.mat`)
+ - ``python`` 3.x (only tested in my working environment, ``python`` 3.4) 
+ - ``numpy``
+ - ``matplotlib``
+ - ``scipy`` (``scipy.io.savemat`` used to save as Matlab ``.mat``)
 
 
 AccuRT is a registered trademark of Geminor Inc. in the United States.
