@@ -252,8 +252,12 @@ class PyAccu(object):
             f.close()
 
 
-    def plot(self,profile=False,run=1,direction='down'):
-        
+    def plot(self,profile=False,run=1,direction='down',ax=None):
+        '''Plots data from one of the runs, either as a vertical profile or
+        as spectra. Either upwelling or downwelling irradiance.'''
+        if ax is None:
+            fig,ax = plt.subplots()
+            
         if direction=='up':
             data = self.updata[:,:,run-1]
         elif direction == 'down':
@@ -261,8 +265,6 @@ class PyAccu(object):
 
 
         if profile:
-            fig = plt.figure()
-            ax = fig.add_subplot(111)
             ax.plot(data,self.depths)
             ax.set_ylabel('Depth below TOA [m]')
             ax.set_xlabel('Irradiance [W/m2]')
@@ -271,8 +273,6 @@ class PyAccu(object):
                       loc='best',
                       title='Wavelength [nm]')
         else:
-            fig = plt.figure()
-            ax = fig.add_subplot(111)
             ax.plot(self.wavelengths,data.T)
             ax.set_xlabel('Wavelength [nm]')
             ax.set_ylabel('Irradiance [W/m2]')
@@ -281,7 +281,7 @@ class PyAccu(object):
                       title='Depth below TOA [m]')
             
         
-        return fig, ax
+        return ax
 
 
 
