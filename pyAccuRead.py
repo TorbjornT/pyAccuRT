@@ -5,6 +5,7 @@ Class for doing stuff with output from AccuRT.
 import numpy as np
 import matplotlib.pyplot as plt
 import scipy.io as sio
+import os
 
 class PyAccu(object):
     '''Notes to self:
@@ -50,8 +51,8 @@ class PyAccu(object):
         up_diffuse = 'cosine_irradiance_upward.txt'
         down_diffuse = 'cosine_irradiance_downward.txt'
 
-        updiff = basefolder + outputfolder + up_diffuse
-        downdiff = basefolder + outputfolder + down_diffuse
+        updiff = os.path.join(basefolder, outputfolder, up_diffuse)
+        downdiff = os.path.joind(basefolder, outputfolder, down_diffuse)
 
         
         self.nruns, self.nstreams, self.ndepths, self.nwavelengths, \
@@ -64,8 +65,8 @@ class PyAccu(object):
             up_direct = 'cosine_irradiance_direct_upward.txt'
             down_direct = 'cosine_irradiance_direct_downward.txt'
         
-            updir = basefolder + outputfolder + up_direct
-            downdir = basefolder + outputfolder + down_direct
+            updir = os.path.join(basefolder, outputfolder, up_direct)
+            downdir = os.path.join(basefolder, outputfolder, down_direct)
             *_, self.downdirect  = \
                 self.readirradiance(downdir)
             *_, self.updirect  = \
@@ -75,14 +76,14 @@ class PyAccu(object):
             supfile = 'scalar_irradiance_upward.txt'
             sdownfile = 'scalar_irradiance_downward.txt'
 
-            *_, self.scalar_down = self.readirradiance(basefolder + outputfolder + sdownfile)
-            *_, self.scalar_up = self.readirradiance(basefolder + outputfolder + supfile)
+            *_, self.scalar_down = self.readirradiance(os.path.join(basefolder, outputfolder, sdownfile))
+            *_, self.scalar_up = self.readirradiance(os.path.join(basefolder, outputfolder, supfile))
 
 
 
         if isinstance(runvarfile,str):
             try:
-                self.runvar = np.loadtxt(basefolder + runvarfile)
+                self.runvar = np.loadtxt(os.path.join(basefolder, runvarfile))
             except FileNotFoundError:
                 print('{0} not a valid filename'.format(runvarfile))
                 self.runvar = runvarfile
@@ -94,11 +95,11 @@ class PyAccu(object):
             else:
                 self.runvar = np.array(runvarfile)
 
-        with open(basefolder + outputfolder + 'version.txt','r') as ver:
+        with open(os.path.join(basefolder, outputfolder, 'version.txt'),'r') as ver:
             self.modelversion = ver.readline()[:-1]
 
         if read_iops:
-            filename = basefolder + outputfolder + 'iops.txt'
+            filename = os.path.join(basefolder, outputfolder, 'iops.txt')
             self.iops = self.readiops(filename)
 
 
