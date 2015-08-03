@@ -52,7 +52,7 @@ class PyAccu(object):
         down_diffuse = 'cosine_irradiance_downward.txt'
 
         updiff = os.path.join(basefolder, outputfolder, up_diffuse)
-        downdiff = os.path.joind(basefolder, outputfolder, down_diffuse)
+        downdiff = os.path.join(basefolder, outputfolder, down_diffuse)
 
         
         self.nruns, self.nstreams, self.ndepths, self.nwavelengths, \
@@ -98,7 +98,7 @@ class PyAccu(object):
         with open(os.path.join(basefolder, outputfolder, 'version.txt'),'r') as ver:
             self.modelversion = ver.readline()[:-1]
 
-        if read_iops:
+        if iops:
             filename = os.path.join(basefolder, outputfolder, 'iops.txt')
             self.iops = self.readiops(filename)
 
