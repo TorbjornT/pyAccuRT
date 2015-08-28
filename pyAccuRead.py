@@ -149,18 +149,12 @@ class PyAccu(object):
 
         with open(filename,'r') as f:
             nRuns = int(f.readline())
-            nLayerDepths, nWavelengths, nPhaseMoments = [int(x) for x in f.readline().split()]
-
-            totalOpticalDepth = np.empty((nLayerDepths,nWavelengths))
-            absorptionCoefficients = np.empty((nLayerDepths,nWavelengths))
-            scatteringCoefficients = np.empty((nLayerDepths,nWavelengths))
-            scatteringScalingFactors = np.empty((nLayerDepths,nWavelengths))
-            phaseMoments = np.empty((nLayerDepths,nWavelengths,nPhaseMoments))
-
             
-        with open(filename,'r') as f:
-            nRuns = int(f.readline())
-
+            totalOpticalDepth = []
+            absorptionCoefficients = []
+            scatteringCoefficients = []
+            scatteringScalingFactors = []
+            phaseMoments = []
             LayerDepths = []
             Wavelengths = []
 
@@ -169,21 +163,31 @@ class PyAccu(object):
 
                 LayerDepths.append(np.array([float(x) for x in f.readline().split()]))
                 Wavelengths.append(np.array([float(x) for x in f.readline().split()]))
+                
+                ToD = np.empty((nLayerDepths,nWavelengths))
+                AC = np.empty((nLayerDepths,nWavelengths))
+                SC = np.empty((nLayerDepths,nWavelengths))
+                SSF = np.empty((nLayerDepths,nWavelengths))
+                PM = np.empty((nLayerDepths,nWavelengths,nPhaseMoments))
+
 
                 for j in range(nLayerDepths):
                     for k in range(nWavelengths):
                         d = f.readline().split()
-                        totalOpticalDepth[j,k] = float(d.pop(0))
-                        absorptionCoefficients[j,k] = float(d.pop(0))
-                        scatteringCoefficients[j,k] = float(d.pop(0))
-                        scatteringScalingFactors[j,k] = float(d.pop(0))
-                        phaseMoments[j,k,:] = [float(k) for k in d]
+                        ToD[j,k] = float(d.pop(0))
+                        AC[j,k] = float(d.pop(0))
+                        SC[j,k] = float(d.pop(0))
+                        SSF[j,k] = float(d.pop(0))
+                        PM[j,k,:] = [float(k) for k in d]
+                        
+                totalOpticalDepth.append(ToD.copy())
+                absorptionCoefficients.append(AC.copy())
+                scatteringCoefficients.append(SC.copy())
+                scatteringScalingFactors.append(SSF.copy())
+                phaseMoments.append(PM.copy())
 
 
             iops = dict(nRuns=nRuns,
-                        nLayerDepths = nLayerDepths,
-                        nWaveLenghts = nWavelengths,
-                        nPhaseMoments = nPhaseMoments,
                         LayerDepths = LayerDepths,
                         Wavelengths = Wavelengths,
                         totalOpticalDepth = totalOpticalDepth,
