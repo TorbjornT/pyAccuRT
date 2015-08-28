@@ -178,7 +178,7 @@ class PyAccu(object):
                         AC[j,k] = float(d.pop(0))
                         SC[j,k] = float(d.pop(0))
                         SSF[j,k] = float(d.pop(0))
-                        PM[j,k,:] = [float(k) for k in d]
+                        PM[j,k,:] = np.array(d,dtype='float')
                         
                 totalOpticalDepth.append(ToD.copy())
                 absorptionCoefficients.append(AC.copy())
