@@ -46,39 +46,43 @@ class PyAccu(object):
                  runvarfile=None, scalar=False,iops=False):
         '''See PyAccu for description of arguments.'''
 
-        outputfolder =  expname + 'Output/'
+        outputfolder =  expname + 'Output'
 
-        up_diffuse = 'cosine_irradiance_upward.txt'
-        down_diffuse = 'cosine_irradiance_downward.txt'
-
-        updiff = os.path.join(basefolder, outputfolder, up_diffuse)
-        downdiff = os.path.join(basefolder, outputfolder, down_diffuse)
+        diff_u_file = 'cosine_irradiance_upward.txt'
+        diff_d_file = 'cosine_irradiance_downward.txt'
+        
+        diff_u_path = os.path.join(basefolder, outputfolder, up_diffuse)
+        diff_d_path = os.path.join(basefolder, outputfolder, down_diffuse)
 
         
         self.nruns, self.nstreams, self.ndepths, self.nwavelengths, \
             self.depths, self.wavelengths, self.updata = \
-            self.readirradiance(updiff)
-        *_, self.downdata  = \
-            self.readirradiance(downdiff)
+            self.readirradiance(diff_u_path)
+        *_, self.downdata = self.readirradiance(diff_d_path)
 
         if direct:
-            up_direct = 'cosine_irradiance_direct_upward.txt'
-            down_direct = 'cosine_irradiance_direct_downward.txt'
+            dir_u_file = 'cosine_irradiance_direct_upward.txt'
+            dir_d_file = 'cosine_irradiance_direct_downward.txt'
         
-            updir = os.path.join(basefolder, outputfolder, up_direct)
-            downdir = os.path.join(basefolder, outputfolder, down_direct)
-            *_, self.downdirect  = \
-                self.readirradiance(downdir)
-            *_, self.updirect  = \
-                self.readirradiance(updir)
+            dir_u_path = os.path.join(basefolder, outputfolder, up_direct)
+            dir_d_path = os.path.join(basefolder, outputfolder, down_direct)
+            *_, self.direct_down = self.readirradiance(dir_d_path)
+            *_, self.direct_up = self.readirradiance(dir_u_path)
 
         if scalar:
-            supfile = 'scalar_irradiance_upward.txt'
-            sdownfile = 'scalar_irradiance_downward.txt'
+            sclr_u_file = 'scalar_irradiance_upward.txt'
+            sclr_d_file = 'scalar_irradiance_downward.txt'
 
-            *_, self.scalar_down = self.readirradiance(os.path.join(basefolder, outputfolder, sdownfile))
-            *_, self.scalar_up = self.readirradiance(os.path.join(basefolder, outputfolder, supfile))
+            sclr_u_path = os.path.join(basefolder, outputfolder, scalar_u_file)
+            sclr_d_path = os.path.join(basefolder, outputfolder, scalar_d_file)
 
+            *_, self.scalar_down = self.readirradiance(sclr_d_path)
+            *_, self.scalar_up = self.readirradiance(sclr_u_path)
+
+
+        if iops:
+            iops_path = os.path.join(basefolder, outputfolder, 'iops.txt')
+            self.iops = self.readiops(iops_path)
 
 
         if isinstance(runvarfile,str):
@@ -98,9 +102,6 @@ class PyAccu(object):
         with open(os.path.join(basefolder, outputfolder, 'version.txt'),'r') as ver:
             self.modelversion = ver.readline()[:-1]
 
-        if iops:
-            filename = os.path.join(basefolder, outputfolder, 'iops.txt')
-            self.iops = self.readiops(filename)
 
 
         
@@ -114,7 +115,7 @@ class PyAccu(object):
 
         with open(filename,'r') as f:
 
-            # read number of runsm streams, depths, wavelengths
+            # read number of runs, streams, depths, wavelengths
             # and lists of detector depths, wavelengths
             nruns = int(f.readline()) 
             nstreams = int(f.readline())
