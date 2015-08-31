@@ -51,8 +51,8 @@ class PyAccu(object):
         diff_u_file = 'cosine_irradiance_upward.txt'
         diff_d_file = 'cosine_irradiance_downward.txt'
         
-        diff_u_path = os.path.join(basefolder, outputfolder, up_diffuse)
-        diff_d_path = os.path.join(basefolder, outputfolder, down_diffuse)
+        diff_u_path = os.path.join(basefolder, outputfolder, diff_u_file)
+        diff_d_path = os.path.join(basefolder, outputfolder, diff_d_file)
 
         
         self.nruns, self.nstreams, self.ndepths, self.nwavelengths, \
@@ -64,8 +64,8 @@ class PyAccu(object):
             dir_u_file = 'cosine_irradiance_direct_upward.txt'
             dir_d_file = 'cosine_irradiance_direct_downward.txt'
         
-            dir_u_path = os.path.join(basefolder, outputfolder, up_direct)
-            dir_d_path = os.path.join(basefolder, outputfolder, down_direct)
+            dir_u_path = os.path.join(basefolder, outputfolder, dir_u_file)
+            dir_d_path = os.path.join(basefolder, outputfolder, dir_d_file)
             *_, self.direct_down = self.readirradiance(dir_d_path)
             *_, self.direct_up = self.readirradiance(dir_u_path)
 
@@ -73,8 +73,8 @@ class PyAccu(object):
             sclr_u_file = 'scalar_irradiance_upward.txt'
             sclr_d_file = 'scalar_irradiance_downward.txt'
 
-            sclr_u_path = os.path.join(basefolder, outputfolder, scalar_u_file)
-            sclr_d_path = os.path.join(basefolder, outputfolder, scalar_d_file)
+            sclr_u_path = os.path.join(basefolder, outputfolder, sclr_u_file)
+            sclr_d_path = os.path.join(basefolder, outputfolder, sclr_d_file)
 
             *_, self.scalar_down = self.readirradiance(sclr_d_path)
             *_, self.scalar_up = self.readirradiance(sclr_u_path)
