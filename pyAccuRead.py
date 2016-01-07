@@ -345,3 +345,18 @@ class PyAccu(object):
             self.scalar_up = gaussf(self.scalar_up,sigma=n,axis=1)
         except:
             pass
+
+
+            
+
+    def calc_heatingrate(self):
+        Eabs = np.empty_like(np.squeeze(self.scalar_down))
+        for k in range(Eabs.shape[2]):
+            layerdepths = self.iops['LayerDepths'][k]
+            abscoeff = self.iops['absorptionCoefficients'][k]
+            layerind = [np.where(layerdepths>=dd)[0][0] for dd in self.depths]
+            for i,j in enumerate(layerind):
+                Eabs[i,:,k] = abscoeff[j] * (self.scalar_down[i,:,k] + self.scalar_up[i,:,k])
+        Eabs[Eabs<0] = 0
+
+        return Eabs
