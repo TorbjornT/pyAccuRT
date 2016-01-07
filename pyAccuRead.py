@@ -6,6 +6,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import scipy.io as sio
 import os
+from scipy.ndimage.filters import gaussian_filter1d as gaussf
 
 class PyAccu(object):
     '''Reads the output text files from AccuRT, and includes methods for
@@ -326,3 +327,21 @@ class PyAccu(object):
 
         return t
 
+
+
+    def gauss_smooth(self,n=5):
+        '''Smooth data with a Gaussian filter.'''
+
+        self.downdata = gaussf(self.downdata,sigma=n,axis=1)
+        self.updata = gaussf(self.updata,sigma=n,axis=1)
+
+        try:
+            self.direct_down = gaussf(self.direct_down,sigma=n,axis=1)
+            self.direct_up = gaussf(self.direct_up,sigma=n,axis=1)
+        except:
+            pass
+        try:
+            self.scalar_down = gaussf(self.scalar_down,sigma=n,axis=1)
+            self.scalar_up = gaussf(self.scalar_up,sigma=n,axis=1)
+        except:
+            pass
