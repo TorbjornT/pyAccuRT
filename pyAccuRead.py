@@ -190,13 +190,13 @@ class PyAccu(object):
 
 
             iops = dict(nRuns=nRuns,
-                        LayerDepths = LayerDepths,
-                        Wavelengths = Wavelengths,
-                        totalOpticalDepth = totalOpticalDepth,
-                        absorptionCoefficients = absorptionCoefficients,
-                        scatteringCoefficients = scatteringCoefficients,
-                        scatteringScalingFactors = scatteringScalingFactors,
-                        phaseMoments = phaseMoments)
+                        LayerDepths = np.array(LayerDepths),
+                        Wavelengths = np.array(Wavelengths),
+                        totalOpticalDepth = np.array(totalOpticalDepth),
+                        absorptionCoefficients = np.array(absorptionCoefficients),
+                        scatteringCoefficients = np.array(scatteringCoefficients),
+                        scatteringScalingFactors = np.array(scatteringScalingFactors),
+                        phaseMoments = np.array(phaseMoments))
 
             return iops
                         
