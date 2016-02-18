@@ -49,8 +49,8 @@ class PyAccu(object):
 
         outputfolder =  expname + 'Output'
 
-        diff_u_file = 'cosine_irradiance_upward.txt'
-        diff_d_file = 'cosine_irradiance_downward.txt'
+        diff_u_file = 'cosine_irradiance_total_upward.txt'
+        diff_d_file = 'cosine_irradiance_total_downward.txt'
         
         diff_u_path = os.path.join(basefolder, outputfolder, diff_u_file)
         diff_d_path = os.path.join(basefolder, outputfolder, diff_d_file)
@@ -71,8 +71,8 @@ class PyAccu(object):
             *_, self.direct_up = self.readirradiance(dir_u_path)
 
         if scalar:
-            sclr_u_file = 'scalar_irradiance_upward.txt'
-            sclr_d_file = 'scalar_irradiance_downward.txt'
+            sclr_u_file = 'scalar_irradiance_total_upward.txt'
+            sclr_d_file = 'scalar_irradiance_total_downward.txt'
 
             sclr_u_path = os.path.join(basefolder, outputfolder, sclr_u_file)
             sclr_d_path = os.path.join(basefolder, outputfolder, sclr_d_file)
@@ -330,7 +330,8 @@ class PyAccu(object):
 
 
     def gauss_smooth(self,n=5):
-        '''Smooth data with a Gaussian filter.'''
+        '''Smooth data with a Gaussian filter.
+        Todo: inplace or not'''
 
         self.downdata = gaussf(self.downdata,sigma=n,axis=1)
         self.updata = gaussf(self.updata,sigma=n,axis=1)
@@ -350,6 +351,7 @@ class PyAccu(object):
             
 
     def calc_heatingrate(self):
+        '''Add test for scalar and iops'''
         Eabs = np.empty_like(np.squeeze(self.scalar_down))
         for k in range(Eabs.shape[2]):
             layerdepths = self.iops['LayerDepths'][k]
