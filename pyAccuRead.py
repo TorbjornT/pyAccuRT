@@ -296,8 +296,8 @@ class PyAccu(object):
 
         if layer == 'all':
             if integrated:
-                a = np.trapz(self.updata,x = self.wavelengths,axis=1)/\
-                    np.trapz(self.downdata,x=self.wavelengths,axis=1)
+                a = np.trapz(self.updata, x=self.wavelengths,axis=1)/\
+                    np.trapz(self.downdata, x=self.wavelengths,axis=1)
             else:
                 a = self.updata / self.downdata
 
@@ -306,8 +306,8 @@ class PyAccu(object):
             reflected = self.updata[layer,:,:]
 
             if integrated:
-                a = np.trapz(reflected,x = self.wavelengths,axis=1)/\
-                    np.trapz(incident,x=self.wavelengths,axis=1)
+                a = np.trapz(reflected,x = self.wavelengths,axis=0)/\
+                    np.trapz(incident,x=self.wavelengths,axis=0)
             else:
                 a = reflected / incident
 
