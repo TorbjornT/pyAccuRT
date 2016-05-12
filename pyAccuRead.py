@@ -47,6 +47,10 @@ class PyAccu(object):
                  runvarfile=None, scalar=False,iops=False):
         '''See PyAccu for description of arguments.'''
 
+        self.has_direct = False
+        self.has_scalar = False
+        self.has_iops = False
+
         outputfolder =  expname + 'Output'
 
         diff_u_file = 'cosine_irradiance_total_upward.txt'
@@ -62,6 +66,7 @@ class PyAccu(object):
         *_, self.downdata = self.readirradiance(diff_d_path)
 
         if direct:
+            self.has_direct = True
             dir_u_file = 'cosine_irradiance_direct_upward.txt'
             dir_d_file = 'cosine_irradiance_direct_downward.txt'
         
@@ -71,6 +76,7 @@ class PyAccu(object):
             *_, self.direct_up = self.readirradiance(dir_u_path)
 
         if scalar:
+            self.has_scalar = True
             sclr_u_file = 'scalar_irradiance_total_upward.txt'
             sclr_d_file = 'scalar_irradiance_total_downward.txt'
 
@@ -82,6 +88,7 @@ class PyAccu(object):
 
 
         if iops:
+            self.has_iops = True
             iops_path = os.path.join(basefolder, outputfolder, 'iops.txt')
             self.iops = self.readiops(iops_path)
 
