@@ -212,22 +212,37 @@ class PyAccu(object):
             
 
 
-    def writefile(self,filename,output='matlab'):
+    def writefile(self,filename,output=None):
         '''output is 'matlab' or 'netcdf'.'''
 
-
+        if filename.endswith('.mat'):
+            output = 'matlab'
+            filename = os.path.splitext(filename)[0]
+        elif filename.endswith('.nc'):
+            output = 'netcdf'
+            filename = os.path.splitext(filename)[0]
         if output == 'matlab':
-            sio.savemat('{0}.mat'.format(filename),
-                        dict(up=self.updata,
-                             down=self.downdata,
-                             nRuns=self.nruns,
-                             nWavelengths=self.nwavelengths,
-                             nDepths=self.ndepths,
-                             nStreams=self.nstreams,
-                             wavelengths=self.wavelengths,
-                             depths=self.depths,
-                             runvar=self.runvar,
-                             modelversion=self.modelversion))
+            data = dict(up=self.updata,
+                        down=self.downdata,
+                        nRuns=self.nruns,
+                        nWavelengths=self.nwavelengths,
+                        nDepths=self.ndepths,
+                        nStreams=self.nstreams,
+                        wavelengths=self.wavelengths,
+                        depths=self.depths,
+                        runvar=self.runvar,
+                        modelversion=self.modelversion)
+            if self.has_scalar:
+                data['scalar_up'] = self.scalar_up
+                data['scalar_down'] = self.scalar_down
+            if self.has_direct:
+                data['direct_up'] = self.direct_up
+                data['direct_down'] = self.direct_down
+            if self.has_iops:
+                data['iops'] = self.iops
+
+            
+            sio.savemat('{0}.mat'.format(filename),data)
 
         elif output == 'netcdf':
 
