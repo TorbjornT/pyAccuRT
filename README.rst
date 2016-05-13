@@ -4,9 +4,9 @@ Readme
 
 ``PyAccu`` class is for
 
- - reading output from AccuRT
+ - reading output from AccuRT radiative transfer model
  - creating simple plots
- - calculating albedo, transmittance
+ - calculating albedo, transmittance, some other parameters
  - writing data to Matlab- or NetCDF-file.
 
 Dependencies:
