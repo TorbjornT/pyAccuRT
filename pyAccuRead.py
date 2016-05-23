@@ -351,23 +351,39 @@ class PyAccu(object):
 
 
 
-    def gauss_smooth(self,n=5):
+    def gauss_smooth(self,n=5,inplace=False):
         '''Smooth data with a Gaussian filter.
-        Todo: inplace or not'''
+        '''
 
-        self.downdata = gaussf(self.downdata,sigma=n,axis=1)
-        self.updata = gaussf(self.updata,sigma=n,axis=1)
+        if inplace:
+            self.downdata = gaussf(self.downdata,sigma=n,axis=1)
+            self.updata = gaussf(self.updata,sigma=n,axis=1)
 
-        try:
-            self.direct_down = gaussf(self.direct_down,sigma=n,axis=1)
-            self.direct_up = gaussf(self.direct_up,sigma=n,axis=1)
-        except:
-            pass
-        try:
-            self.scalar_down = gaussf(self.scalar_down,sigma=n,axis=1)
-            self.scalar_up = gaussf(self.scalar_up,sigma=n,axis=1)
-        except:
-            pass
+            try:
+                self.direct_down = gaussf(self.direct_down,sigma=n,axis=1)
+                self.direct_up = gaussf(self.direct_up,sigma=n,axis=1)
+            except:
+                pass
+            try:
+                self.scalar_down = gaussf(self.scalar_down,sigma=n,axis=1)
+                self.scalar_up = gaussf(self.scalar_up,sigma=n,axis=1)
+            except:
+                pass
+        else:
+            self.downdata_sm = gaussf(self.downdata,sigma=n,axis=1)
+            self.updata_sm = gaussf(self.updata,sigma=n,axis=1)
+
+            try:
+                self.direct_down_sm = gaussf(self.direct_down,sigma=n,axis=1)
+                self.direct_up_sm = gaussf(self.direct_up,sigma=n,axis=1)
+            except:
+                pass
+            try:
+                self.scalar_down_sm = gaussf(self.scalar_down,sigma=n,axis=1)
+                self.scalar_up_sm = gaussf(self.scalar_up,sigma=n,axis=1)
+            except:
+                pass
+
 
 
             
