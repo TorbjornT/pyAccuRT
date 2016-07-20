@@ -5,5 +5,5 @@ setup(name='pyAccuRT',
       description='Reading and plotting results from AccuRT',
       author='Torbjørn Taskjelle',
       author_email='Torbjorn.Taskjelle@ift.uib.no',
-      py_modules=['pyAccuRead']
+      packages=['accuread']
       )
