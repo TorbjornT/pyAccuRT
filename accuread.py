@@ -89,7 +89,8 @@ class ReadART(object):
         if radiance:
             outputfolder =  expname + 'Output'
             filename = os.path.join(basefolder,outputfolder,'radiance.txt')
-            self.radiance = self.readradiance(filename)
+            self.radiance, self.polarangles,self.azimuthangles = \
+                                        self.readradiance(filename)
 
 
         if iops:
@@ -161,7 +162,10 @@ class ReadART(object):
         '''Read output radiance.txt from AccuRT.
         Returns number of runs, streams, detector depths and wavelengths,
         and numpy arrays of dephts, wavelengths, polar and azimuth angles
-        and radiance'''
+        and radiance.
+
+        Dimensions of radiance array is
+        (depth) x (wavelength) x (polar angle) x (azimuth angle) x (run number)'''
 
         
         with open(filename, 'r') as f:
@@ -194,7 +198,7 @@ class ReadART(object):
                             for m in range(nazimuthangles):
                                 radiances[j,k,l,m] = rad.pop(0)
 
-        return radiances
+        return radiances, polarangles, azimuthangles
 
     def readiops(self,filename):
         '''Read iops.txt, returns dict.'''

@@ -46,7 +46,21 @@ class TestAccuRead(unittest.TestCase):
 
     def test_rad_size(self):
         radshape = self.PA.radiance.shape
-        self.assertEqual((3,4,10,10,2),radshape)
+        self.assertEqual((3,4,10,7,2),radshape)
+
+    def test_polarangles(self):
+        polang = self.PA.polarangles
+        self.assertTrue(
+            np.array_equal(
+                np.array([179.92,160,140,120,100,80,60,40,20,0.081028]),
+                polang))
+
+    def test_azimuthanglesangles(self):
+        azang = self.PA.azimuthangles
+        self.assertTrue(
+            np.array_equal(
+                np.array([50,70,90,110,130,150,170]),
+                azang))
 
 if __name__ == '__main__':
     unittest.main()
