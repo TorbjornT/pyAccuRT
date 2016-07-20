@@ -33,6 +33,8 @@ class ReadART(object):
     scalar -- Boolean. If True, read in scalar irradiance in addition to
         diffuse irradiance. Default False.
 
+    radiance -- Boolean. If True, read radiance. Default False.
+
     iops -- Boolean. If True, read in iops-file into a dict. Default False.
 
 
