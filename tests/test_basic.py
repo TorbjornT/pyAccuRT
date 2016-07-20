@@ -6,7 +6,8 @@ class TestAccuRead(unittest.TestCase):
 
     def setUp(self):
         self.PA = ReadART('demo1',basefolder='tests/testdata',
-            scalar=True,iops=True,direct=True,radiance=True,runvarfile='sza.txt')
+            scalar=True,iops=True,direct=True,sine=True,radiance=True,
+            runvarfile='sza.txt')
 
     def test_wl(self):
         wl = self.PA.wavelengths
@@ -24,6 +25,10 @@ class TestAccuRead(unittest.TestCase):
         irrshape = self.PA.downdata.shape
         self.assertEqual((3,4,2),irrshape)
 
+    def test_sindown_size(self):
+        irrshape = self.PA.sine_down.shape
+        self.assertEqual((3,4,2),irrshape)
+
     def test_scldown_size(self):
         irrshape = self.PA.scalar_down.shape
         self.assertEqual((3,4,2),irrshape)
@@ -34,6 +39,10 @@ class TestAccuRead(unittest.TestCase):
 
     def test_cosup_size(self):
         irrshape = self.PA.updata.shape
+        self.assertEqual((3,4,2),irrshape)
+
+    def test_sinup_size(self):
+        irrshape = self.PA.sine_up.shape
         self.assertEqual((3,4,2),irrshape)
 
     def test_sclup_size(self):

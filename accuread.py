@@ -46,7 +46,8 @@ class ReadART(object):
      '''
 
     def __init__(self,expname,basefolder='./',direct=False,
-                 runvarfile=None, scalar=False,iops=False,radiance=False):
+                 runvarfile=None, scalar=False,iops=False,
+                 radiance=False,sine=False):
         '''See PyAccu for description of arguments.'''
 
         self.has_direct = False
@@ -87,6 +88,16 @@ class ReadART(object):
 
             *_, self.scalar_down = self.readirradiance(sclr_d_path)
             *_, self.scalar_up = self.readirradiance(sclr_u_path)
+        
+        if sine:
+            sine_u_file = 'sine_irradiance_total_upward.txt'
+            sine_d_file = 'sine_irradiance_total_downward.txt'
+
+            sine_u_path = os.path.join(basefolder, outputfolder, sine_u_file)
+            sine_d_path = os.path.join(basefolder, outputfolder, sine_d_file)
+
+            *_, self.sine_down = self.readirradiance(sine_d_path)
+            *_, self.sine_up = self.readirradiance(sine_u_path)
 
         if radiance:
             outputfolder =  expname + 'Output'
