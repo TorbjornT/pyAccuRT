@@ -8,7 +8,7 @@ import scipy.io as sio
 import os
 from scipy.ndimage.filters import gaussian_filter1d as gaussf
 
-class PyAccu(object):
+class ReadART(object):
     '''Reads the output text files from AccuRT, and includes methods for
     calculating albedo and transmittance, and for simple plotting.
 
