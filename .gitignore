@@ -29,3 +29,4 @@ build/
 /tests/testdata/demo1Materials/water_impurity_gsm
 /tests/testdata/demo1Materials/water_particles
 /tests/testdata/gasIOP_srf.txt
+*.directory
