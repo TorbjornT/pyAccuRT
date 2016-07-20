@@ -44,7 +44,7 @@ class ReadART(object):
      '''
 
     def __init__(self,expname,basefolder='./',direct=False,
-                 runvarfile=None, scalar=False,iops=False):
+                 runvarfile=None, scalar=False,iops=False,radiance=False):
         '''See PyAccu for description of arguments.'''
 
         self.has_direct = False
@@ -85,6 +85,11 @@ class ReadART(object):
 
             *_, self.scalar_down = self.readirradiance(sclr_d_path)
             *_, self.scalar_up = self.readirradiance(sclr_u_path)
+
+        if radiance:
+            outputfolder =  expname + 'Output'
+            filename = os.path.join(basefolder,outputfolder,'radiance.txt')
+            self.radiance = self.readradiance(filename)
 
 
         if iops:
@@ -151,6 +156,45 @@ class ReadART(object):
 
 
         return nruns, nstreams, ndepths, nwavelengths, depths, wavelengths, irradiances
+
+    def readradiance(selfm,filename):
+        '''Read output radiance.txt from AccuRT.
+        Returns number of runs, streams, detector depths and wavelengths,
+        and numpy arrays of dephts, wavelengths, polar and azimuth angles
+        and radiance'''
+
+        
+        with open(filename, 'r') as f:
+            nruns = int(f.readline()) 
+            nstreams = int(f.readline())
+            ndepths, nwavelengths, npolarangles, nazimuthangles = [int(j) for j in f.readline().split()]
+            depths = np.array([float(j) for j in f.readline().split()])
+            wavelengths = np.array([float(j) for j in f.readline().split()])
+            polarangles = np.array([float(j) for j in f.readline().split()])
+            azimuthangles = np.array([float(j) for j in f.readline().split()])
+
+            radiances = np.empty((ndepths,nwavelengths,npolarangles,nazimuthangles,nruns))
+
+            rad = [float(j) for j in f.readline().split()]
+            for j in range(ndepths):
+                for k in range(nwavelengths):
+                    for l in range(npolarangles):
+                        for m in range(nazimuthangles):
+                            radiances[j,k,l,m] = rad.pop(0)
+
+            for i in range(1,nruns):
+                #skip lines with nstreams, ndepths, etc.
+                for k in range(6):
+                    next(f)
+                rad = [float(j) for j in f.readline().split()]
+                # read values
+                for j in range(ndepths):
+                    for k in range(nwavelengths):
+                        for l in range(npolarangles):
+                            for m in range(nazimuthangles):
+                                radiances[j,k,l,m] = rad.pop(0)
+
+        return radiances
 
     def readiops(self,filename):
         '''Read iops.txt, returns dict.'''
