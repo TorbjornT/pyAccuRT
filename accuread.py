@@ -192,24 +192,16 @@ class ReadART(object):
 
             radiances = np.empty((ndepths,nwavelengths,npolarangles,nazimuthangles,nruns))
 
-            rad = [float(j) for j in f.readline().split()]
-            for j in range(ndepths):
-                for k in range(nwavelengths):
-                    for l in range(npolarangles):
-                        for m in range(nazimuthangles):
-                            radiances[j,k,l,m] = rad.pop(0)
+            rad = np.array([float(j) for j in f.readline().split()])
+            radiances[:,:,:,:,0] = rad.reshape(ndepths,nwavelengths,npolarangles,nazimuthangles)
 
             for i in range(1,nruns):
                 #skip lines with nstreams, ndepths, etc.
                 for k in range(6):
                     next(f)
-                rad = [float(j) for j in f.readline().split()]
+                rad = np.array([float(j) for j in f.readline().split()])
                 # read values
-                for j in range(ndepths):
-                    for k in range(nwavelengths):
-                        for l in range(npolarangles):
-                            for m in range(nazimuthangles):
-                                radiances[j,k,l,m] = rad.pop(0)
+                radiances[:,:,:,:,i] = rad.reshape(ndepths,nwavelengths,npolarangles,nazimuthangles)
 
         return radiances, polarangles, azimuthangles
 
