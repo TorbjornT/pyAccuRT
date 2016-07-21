@@ -171,7 +171,7 @@ class ReadART(object):
 
         return nruns, nstreams, ndepths, nwavelengths, depths, wavelengths, irradiances
 
-    def readradiance(selfm,filename):
+    def readradiance(self,filename):
         '''Read output radiance.txt from AccuRT.
         Returns number of runs, streams, detector depths and wavelengths,
         and numpy arrays of dephts, wavelengths, polar and azimuth angles
