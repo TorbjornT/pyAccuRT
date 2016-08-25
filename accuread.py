@@ -388,15 +388,28 @@ class ReadART(object):
 
         return a
 
-    def transmittance(self, layers, integrated=False):
+    def transmittance(self, layers, integrated=False, wlrange=None):
         '''Calculate transmittance between levels given by 2-tuple layers.'''
 
         incident = self.downdata[layers[0],:,:]
         outgoing = self.downdata[layers[1],:,:]
 
         if integrated:
-            t = np.trapz(outgoing,x=self.wavelengths,axis=0)/\
-                np.trapz(incident,x=self.wavelengths,axis=0)
+            if wlrange is None:
+                t = np.trapz(outgoing,x=self.wavelengths,axis=0)/\
+                    np.trapz(incident,x=self.wavelengths,axis=0)
+            else:
+                J = np.abs(self.wavelengths-wlrange[0]).argmin()
+                K = np.abs(self.wavelengths-wlrange[1]).argmin()
+                if (self.wavelengths[J] > wlrange[0]) and (J > 0):
+                    J -= 1
+                if (self.wavelengths[K] < wlrange[1]):
+                    K += 2
+                else:
+                    K += 1
+
+                t = np.trapz(outgoing[J:K,:],x=self.wavelengths[J:K],axis=0)/\
+                    np.trapz(incident[J:K,:],x=self.wavelengths[J:K],axis=0)
         else:
             t = outgoing / incident
 
