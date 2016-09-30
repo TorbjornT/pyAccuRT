@@ -1,8 +1,6 @@
-========
-Readme
-========
+# Readme
 
-``PyAccu`` class is for
+``ReadART`` class is for
 
  - reading output from AccuRT radiative transfer model
  - creating simple plots
