@@ -1,4 +1,4 @@
-# Readme
+[![Build Status](https://travis-ci.org/TorbjornT/pyAccuRT.svg?branch=master)](https://travis-ci.org/TorbjornT/pyAccuRT)  (tests are rudimentary at the moment)
 
 ``ReadART`` class is for
 
@@ -9,7 +9,7 @@
 
 Dependencies:
 
- - ``python`` 3.x (only tested in my working environment, ``python`` 3.4) 
+ - ``python`` 3.x (only tested in my working environment, ``python`` 3.5) 
  - ``numpy``
  - ``matplotlib``
  - ``scipy`` (``scipy.io.savemat`` used to save as Matlab ``.mat``)
@@ -29,3 +29,5 @@ Quite standard, clone/download repo and run
 AccuRT is a registered trademark of Geminor Inc. in the United States.
 
 The code in this repository is licensed under the MIT License.
+
+
