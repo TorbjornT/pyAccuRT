@@ -456,10 +456,16 @@ class ReadART(object):
 
     def calc_heatingrate(self):
         '''Add test for scalar and iops'''
-        Eabs = np.empty_like(np.squeeze(self.scalar_down))
+        if not (has_scalar and has_iops):
+            raise AttributeError('Scalar irradiance and IOPs not available, you need scalar=True,iops=True')
+        Eabs = np.empty_like(self.scalar_down)
         for k in range(Eabs.shape[2]):
-            layerdepths = self.iops['LayerDepths'][k]
-            abscoeff = self.iops['absorptionCoefficients'][k]
+            if Eabs.shape[2] == 1:
+                layerdepths = self.iops['LayerDepths']
+                abscoeff = self.iops['absorptionCoefficients']
+            else:
+                layerdepths = self.iops['LayerDepths'][k]
+                abscoeff = self.iops['absorptionCoefficients'][k]
             layerind = [np.where(layerdepths>=dd)[0][0] for dd in self.depths]
             for i,j in enumerate(layerind):
                 Eabs[i,:,k] = abscoeff[j] * (self.scalar_down[i,:,k] + self.scalar_up[i,:,k])
