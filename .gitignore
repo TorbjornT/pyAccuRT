@@ -30,3 +30,4 @@ build/
 /tests/testdata/demo1Materials/water_particles
 /tests/testdata/gasIOP_srf.txt
 *.directory
+/tests/testdata/demo1Output/*.m
