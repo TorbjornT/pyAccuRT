@@ -471,3 +471,12 @@ class ReadART(object):
         Eabs[Eabs<0] = 0
 
         return Eabs
+
+    def diffuse_attenuation(self,integrated=False):
+        dz = np.diff(self.depths)
+        if integrated:
+            dint = np.trapz(self.downdata,axis=1,x=self.wavelengths)
+            kd = 1/dz * np.log(dint[:-1,:]/dint[1:,:])
+        else:
+            kd = 1/dz * np.log(self.downdata[:-1,:,:]/self.downdata[1:,:,:])
+        return kd
