@@ -5,7 +5,7 @@ setup(name='pyaccurt',
       description='Reading and plotting results from AccuRT',
       author='Torbjoern Taskjelle',
       author_email='totaskj@gmail.com',
-      url='https://bitbucket.org/torbjornt/pyaccurt/',
+      url='https://github.com/TorbjornT/pyAccuRT',
       license='MIT',
       py_modules=['accuread']
       )
