@@ -455,8 +455,7 @@ class ReadART(object):
             
 
     def calc_heatingrate(self):
-        '''Add test for scalar and iops'''
-        if not (has_scalar and has_iops):
+        if not (self.has_scalar and self.has_iops):
             raise AttributeError('Scalar irradiance and IOPs not available, you need scalar=True,iops=True')
         Eabs = np.empty_like(self.scalar_down)
         for k in range(Eabs.shape[2]):
