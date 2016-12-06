@@ -286,6 +286,7 @@ class ReadART(object):
                         pass
                     elif line.startswith('Layer '):
                         layer += 1
+                        mp[run].append([])
                         mp[run][layer].append(dict())
                         pass
                     elif line.startswith('Bottom depth'):
