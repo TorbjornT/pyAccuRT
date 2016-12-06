@@ -47,7 +47,7 @@ class ReadART(object):
 
     def __init__(self,expname,basefolder='./',direct=False,
                  runvarfile=None, scalar=False,iops=False,
-                 radiance=False,sine=False):
+                 radiance=False,sine=False,material_profile=False):
         '''See PyAccu for description of arguments.'''
 
         self.has_direct = False
@@ -110,6 +110,10 @@ class ReadART(object):
             self.has_iops = True
             iops_path = os.path.join(basefolder, outputfolder, 'iops.txt')
             self.iops = self.readiops(iops_path)
+
+        if material_profile:
+            mp_path = os.path.join(basefolder,outputfolder,'material_profile.txt')
+            self.material_profile = self.read_material_profile(mp_path)
 
 
         if isinstance(runvarfile,str):
@@ -261,8 +265,63 @@ class ReadART(object):
             return iops
                         
 
-                
-            
+    def read_material_profile(self,filename):
+        mp = []
+        with open(filename) as MP:
+            while True:
+                line = MP.readline()
+                if line.startswith('runNo'):
+                    run = int(line.split()[1])
+                    break
+            endoffile = False
+            while True:
+                if endoffile:
+                    break
+                layer = -1
+                mp.append([])
+                while True:
+                    line = MP.readline()
+                    if line.startswith('=') or \
+                       line.startswith('- -') or \
+                       line.startswith('~'):
+                        pass
+                    elif len(line) == 0:
+                        endoffile = True
+                        break
+                    elif line.startswith('runNo'):
+                        run = int(line.split()[1])
+                        break
+                    elif line.startswith('Layer '):
+                        layer += 1
+                        mp[run].append(dict())
+                        pass
+                    elif line.startswith('Bottom depth'):
+                        z = float(line.split()[-2])
+                        mp[run][layer]['bottomdepth'] = z
+                    else:
+                        matname = line.replace(' ','').strip()
+                        material = dict()
+                        conc,conctype = MP.readline().split()
+                        tau,ssa,g = [float(x) for x in MP.readline().split()]
+                        atau,btau = [float(x) for x in MP.readline().split()]
+                        a,b = [float(x) for x in MP.readline().split()]
+                        df = float(MP.readline())
+
+                        material['concentration'] = float(conc)
+                        material['concentrationtype'] = conctype[1:-1]
+                        material['opticaldepth'] = tau
+                        material['singlescatteringalbedo'] = ssa
+                        material['asymmetryfactor'] = g
+                        material['absorptionoptdep'] = atau
+                        material['scatteringoptdep'] = btau
+                        material['absorption'] = a
+                        material['scattering'] = b
+                        material['deltafitscalingfactor'] = df
+
+                        mp[run][layer][matname] = material
+
+        return mp
+
 
 
     def writefile(self,filename,output=None):
