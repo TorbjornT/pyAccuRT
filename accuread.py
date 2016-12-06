@@ -273,27 +273,33 @@ class ReadART(object):
                 if line.startswith('runNo'):
                     run = int(line.split()[1])
                     break
-
+            endoffile = False
             while True:
+                if endoffile:
+                    break
                 layer = -1
                 mp.append([])
                 while True:
                     line = MP.readline()
-                    if line.startswith('='):
-                        run = int(MP.readline().split()[1])
-                        break
-                    elif line.startswith('- -'):
+                    if line.startswith('=') or \
+                       line.startswith('- -') or \
+                       line.startswith('~'):
                         pass
+                    elif len(line) == 0:
+                        endoffile = True
+                        break
+                    elif line.startswith('runNo'):
+                        run = int(line.split()[1])
+                        break
                     elif line.startswith('Layer '):
                         layer += 1
-                        mp[run].append([])
-                        mp[run][layer].append(dict())
+                        mp[run].append(dict())
                         pass
                     elif line.startswith('Bottom depth'):
                         z = float(line.split()[-2])
                         mp[run][layer]['bottomdepth'] = z
                     else:
-                        matname = line.replace(' ','')
+                        matname = line.replace(' ','').strip()
                         material = dict()
                         conc,conctype = MP.readline().split()
                         tau,ssa,g = [float(x) for x in MP.readline().split()]
@@ -301,7 +307,7 @@ class ReadART(object):
                         a,b = [float(x) for x in MP.readline().split()]
                         df = float(MP.readline())
 
-                        material['concentration'] = int(conc)
+                        material['concentration'] = float(conc)
                         material['concentrationtype'] = conctype[1:-1]
                         material['opticaldepth'] = tau
                         material['singlescatteringalbedo'] = ssa
@@ -314,11 +320,8 @@ class ReadART(object):
 
                         mp[run][layer][matname] = material
 
+        return mp
 
-
-
-
-            
 
 
     def writefile(self,filename,output=None):

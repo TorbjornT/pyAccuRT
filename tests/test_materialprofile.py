@@ -11,12 +11,12 @@ class TestMaterialProfile(unittest.TestCase):
 
 
     def test_Nruns(self):
-        self.assertEqual(2,len(MP))
+        self.assertEqual(2,len(self.MP))
 
     def test_atmo(self):
         for j in range(2):
             for i in range(14):
-                self.assertTrue('Atmoshphericgases' in self.MP[j][i])
+                self.assertTrue('Atmosphericgases' in self.MP[j][i])
 
     def test_water(self):
         for j in range(2):
@@ -24,13 +24,14 @@ class TestMaterialProfile(unittest.TestCase):
             self.assertTrue('WaterImpurityCCRR' in self.MP[j][14])
             
     def test_bottom(self):
-        bz = [3e5,5e5,6e5,7e5,7.6e5,8e5,8.4e5,8.8e5,9e5,
-              9.2e5,9.4e5,9.6e5,9.8e5,1e6,1.001e6]
+        bz = [30000.0,50000.0,60000.0,70000.0,76000.0,80000.0,
+              84000.0,88000.0,90000.0,92000.0,94000.0,96000.0,
+              98000.0,100000.0,100100.0]
         for i in range(15):
             self.assertTrue(bz[i]==self.MP[0][i]['bottomdepth'])
 
     def test_ccrr(self):
-        ccrr = self.MP[0][14]
+        ccrr = self.MP[0][14]['WaterImpurityCCRR']
         self.assertTrue(ccrr['concentration'] == 1)
         self.assertTrue(ccrr['concentrationtype'] == 'sf')
         self.assertTrue(ccrr['opticaldepth'] == 12.54)
