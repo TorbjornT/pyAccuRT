@@ -16,3 +16,7 @@ build/
 *.directory
 /tests/testdata/*.m
 examples/.ipynb_checkpoints/
+accumake.py
+generatetemplates.py
+materialdicts.p
+materials.py
