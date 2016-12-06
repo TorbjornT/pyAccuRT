@@ -281,8 +281,9 @@ class ReadART(object):
                 mp.append([])
                 while True:
                     line = MP.readline()
+                    print(line)
                     if line.startswith('=') or \
-                       line.startswith('- -') or \
+                       line.startswith('-') or \
                        line.startswith('~'):
                         pass
                     elif len(line) == 0:
