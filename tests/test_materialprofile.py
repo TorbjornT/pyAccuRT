@@ -33,11 +33,11 @@ class TestMaterialProfile(unittest.TestCase):
         ccrr = self.MP[0][14]
         self.assertTrue(ccrr['concentration'] == 1)
         self.assertTrue(ccrr['concentrationtype'] == 'sf')
-        self.assertTrue(ccrr['opticaldepth'] == 12.54
-        self.assertTrue(ccrr['singlescatterinaglbedo'] == 0.7231
-        self.assertTrue(ccrr['asymmetryfactor'] ==  0.8402
-        self.assertTrue(ccrr['absorptionoptdep'] == 3.474
-        self.assertTrue(ccrr['scatteringoptdep'] == 9.07
-        self.assertTrue(ccrr['absorption'] == 0.03474
-        self.assertTrue(ccrr['scattering'] == 0.0907
-        self.assertTrue(ccrr['deltafitscalingfactor'] == 0.2619
+        self.assertTrue(ccrr['opticaldepth'] == 12.54)
+        self.assertTrue(ccrr['singlescatteringalbedo'] == 0.7231)
+        self.assertTrue(ccrr['asymmetryfactor'] ==  0.8402)
+        self.assertTrue(ccrr['absorptionoptdep'] == 3.474)
+        self.assertTrue(ccrr['scatteringoptdep'] == 9.07)
+        self.assertTrue(ccrr['absorption'] == 0.03474)
+        self.assertTrue(ccrr['scattering'] == 0.0907)
+        self.assertTrue(ccrr['deltafitscalingfactor'] == 0.2619)
