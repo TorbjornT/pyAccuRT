@@ -9,10 +9,12 @@
 
 Dependencies:
 
- - ``python`` 3.x (only tested in my working environment, ``python`` 3.5) 
+ - ``python`` 3.x (``python`` 2 is *not* supported)
  - ``numpy``
  - ``matplotlib``
- - ``scipy`` (``scipy.io.savemat`` used to save as Matlab ``.mat``)
+ - ``scipy``
+    - ``scipy.io`` for writing Matlab and NetCDF files
+    - ``scipy.ndimage.filters.gaussian_filter1d`` for gaussian smoothing
 
 
 Documentation is limited to non-existent, see an example in the examples-folder.
@@ -29,5 +31,3 @@ Quite standard, clone/download repo and run
 AccuRT is a registered trademark of Geminor Inc. in the United States.
 
 The code in this repository is licensed under the MIT License.
-
-
