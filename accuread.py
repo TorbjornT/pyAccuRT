@@ -136,8 +136,12 @@ class ReadART(object):
         if radiance:
             outputfolder =  expname + 'Output'
             filename = os.path.join(basefolder,outputfolder,'radiance.txt')
-            self.radiance, self.polarangles,self.azimuthangles = \
+            self.radiance, self.polarangles,self.azimuthangles, *_ = \
                                         self.readradiance(filename)
+
+            if not hasattr(self,'nruns'):
+                self.nruns, self.nstreams, self.ndepths, self.nwavelengths, \
+                self.depths, self.wavelengths = _
 
 
         if iops:
@@ -241,7 +245,7 @@ class ReadART(object):
                 # read values
                 radiances[:,:,:,:,i] = rad.reshape(ndepths,nwavelengths,npolarangles,nazimuthangles)
 
-        return radiances, polarangles, azimuthangles
+        return radiances, polarangles, azimuthangles, nruns, nstreams, ndepths, nwavelengths, depths, wavelengths
 
     def readiops(self,filename):
         '''Read iops.txt, returns dict.'''
