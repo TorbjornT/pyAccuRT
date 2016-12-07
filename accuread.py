@@ -51,6 +51,8 @@ class ReadART(object):
                  radiance=False,sine=False,material_profile=False):
         '''See PyAccu for description of arguments.'''
 
+        self.has_cosine = False
+        self.has_diffuse = False
         self.has_direct = False
         self.has_scalar = False
         self.has_iops = False
