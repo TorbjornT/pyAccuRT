@@ -92,34 +92,46 @@ class ReadART(object):
 
         if direct:
             self.has_direct = True
-            dir_u_file = 'cosine_irradiance_direct_upward.txt'
-            dir_d_file = 'cosine_irradiance_direct_downward.txt'
+            dir_u_file = fn_fmt.format('cosine','direct','up')
+            dir_d_file = fn_fmt.format('cosine','direct','down')
         
             dir_u_path = os.path.join(basefolder, outputfolder, dir_u_file)
             dir_d_path = os.path.join(basefolder, outputfolder, dir_d_file)
             *_, self.direct_down = self.readirradiance(dir_d_path)
             *_, self.direct_up = self.readirradiance(dir_u_path)
 
+            if not hasattr(self,'nruns'):
+                self.nruns, self.nstreams, self.ndepths, self.nwavelengths, \
+                self.depths, self.wavelengths = _
+
         if scalar:
             self.has_scalar = True
-            sclr_u_file = 'scalar_irradiance_total_upward.txt'
-            sclr_d_file = 'scalar_irradiance_total_downward.txt'
+            sclr_u_file = fn_fmt.format('scalar','total','up')
+            sclr_d_file = fn_fmt.format('scalar','total','down')
 
             sclr_u_path = os.path.join(basefolder, outputfolder, sclr_u_file)
             sclr_d_path = os.path.join(basefolder, outputfolder, sclr_d_file)
 
             *_, self.scalar_down = self.readirradiance(sclr_d_path)
             *_, self.scalar_up = self.readirradiance(sclr_u_path)
+
+            if not hasattr(self,'nruns'):
+                self.nruns, self.nstreams, self.ndepths, self.nwavelengths, \
+                self.depths, self.wavelengths = _
         
         if sine:
-            sine_u_file = 'sine_irradiance_total_upward.txt'
-            sine_d_file = 'sine_irradiance_total_downward.txt'
+            sine_u_file = fn_fmt.format('sine','total','up')
+            sine_d_file = fn_fmt.format('sine','total','down')
 
             sine_u_path = os.path.join(basefolder, outputfolder, sine_u_file)
             sine_d_path = os.path.join(basefolder, outputfolder, sine_d_file)
 
             *_, self.sine_down = self.readirradiance(sine_d_path)
             *_, self.sine_up = self.readirradiance(sine_u_path)
+
+            if not hasattr(self,'nruns'):
+                self.nruns, self.nstreams, self.ndepths, self.nwavelengths, \
+                self.depths, self.wavelengths = _
 
         if radiance:
             outputfolder =  expname + 'Output'
