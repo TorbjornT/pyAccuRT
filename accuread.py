@@ -45,7 +45,8 @@ class ReadART(object):
      >>> a.plot(profile=True)
      '''
 
-    def __init__(self,expname,basefolder='./',direct=False,
+    def __init__(self,expname,basefolder='./',cosine=True,
+                 diffuse=False,direct=False,
                  runvarfile=None, scalar=False,iops=False,
                  radiance=False,sine=False,material_profile=False):
         '''See PyAccu for description of arguments.'''
