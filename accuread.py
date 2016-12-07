@@ -24,18 +24,29 @@ class ReadART(object):
     basefolder -- Folder where the main configfile is located.
         Default './'.
 
-    direct -- Boolean. If True, read in the direct irradiance in addition
-        to the diffuse. Default False.
+    cosine -- Boolean. If True (which is default), read in the
+        total cosine irradiance. 
+
+    diffuse -- Boolean. If True, read in the diffuse cosine irradiance.
+        Default False.
+
+    direct -- Boolean. If True, read in the direct cosine irradiance.
+        Default False.
 
     runvarfile -- Filename or list-like structure holding indices for repeated
         runs. Default None.
 
-    scalar -- Boolean. If True, read in scalar irradiance in addition to
-        diffuse irradiance. Default False.
+    scalar -- Boolean. If True, read in total scalar irradiance
+        Default False.
 
-    radiance -- Boolean. If True, read radiance. Default False.
+    sine -- Boolean. If True, read in total sine weighted irradiance
+        Default False.
 
-    iops -- Boolean. If True, read in iops-file into a dict. Default False.
+    radiance -- Boolean. If True, read radiance.
+        Default False.
+
+    iops -- Boolean. If True, read in iops-file into a dict.
+        Default False.
 
 
      Example:
@@ -45,53 +56,83 @@ class ReadART(object):
      >>> a.plot(profile=True)
      '''
 
-    def __init__(self,expname,basefolder='./',direct=False,
+    def __init__(self,expname,basefolder='./',cosine=True,
+                 diffuse=False,direct=False,
                  runvarfile=None, scalar=False,iops=False,
                  radiance=False,sine=False,material_profile=False):
         '''See PyAccu for description of arguments.'''
 
+        self.has_cosine = False
+        self.has_diffuse = False
         self.has_direct = False
         self.has_scalar = False
         self.has_iops = False
 
         outputfolder =  expname + 'Output'
 
-        diff_u_file = 'cosine_irradiance_total_upward.txt'
-        diff_d_file = 'cosine_irradiance_total_downward.txt'
-        
-        diff_u_path = os.path.join(basefolder, outputfolder, diff_u_file)
-        diff_d_path = os.path.join(basefolder, outputfolder, diff_d_file)
+        fn_fmt = '{0}_irradiance_{1}_{2}ward.txt'
 
+        if cosine:
+            self.has_cosine = True
+            cos_u_file = fn_fmt.format('cosine','total','up')
+            cos_d_file = fn_fmt.format('cosine','total','down')
         
-        self.nruns, self.nstreams, self.ndepths, self.nwavelengths, \
-            self.depths, self.wavelengths, self.updata = \
-            self.readirradiance(diff_u_path)
-        *_, self.downdata = self.readirradiance(diff_d_path)
+            cos_u_path = os.path.join(basefolder, outputfolder, cos_u_file)
+            cos_d_path = os.path.join(basefolder, outputfolder, cos_d_file)
+        
+            self.nruns, self.nstreams, self.ndepths, self.nwavelengths, \
+                self.depths, self.wavelengths, self.updata = \
+                self.readirradiance(cos_u_path)
+            *_, self.downdata = self.readirradiance(cos_d_path)
+
+        if diffuse:
+            self.has_diffuse = True
+            diff_u_file = fn_fmt.format('cosine','diffuse','up')
+            diff_d_file = fn_fmt.format('cosine','diffuse','down')
+        
+            diff_u_path = os.path.join(basefolder, outputfolder, diff_u_file)
+            diff_d_path = os.path.join(basefolder, outputfolder, diff_d_file)
+
+            *_, self.diffuse_down = self.readirradiance(diff_d_path)
+            *_, self.diffuse_up = self.readirradiance(diff_u_path)
+
+            if not hasattr(self,'nruns'):
+                self.nruns, self.nstreams, self.ndepths, self.nwavelengths, \
+                self.depths, self.wavelengths = _
+
 
         if direct:
             self.has_direct = True
-            dir_u_file = 'cosine_irradiance_direct_upward.txt'
-            dir_d_file = 'cosine_irradiance_direct_downward.txt'
+            dir_u_file = fn_fmt.format('cosine','direct','up')
+            dir_d_file = fn_fmt.format('cosine','direct','down')
         
             dir_u_path = os.path.join(basefolder, outputfolder, dir_u_file)
             dir_d_path = os.path.join(basefolder, outputfolder, dir_d_file)
             *_, self.direct_down = self.readirradiance(dir_d_path)
             *_, self.direct_up = self.readirradiance(dir_u_path)
 
+            if not hasattr(self,'nruns'):
+                self.nruns, self.nstreams, self.ndepths, self.nwavelengths, \
+                self.depths, self.wavelengths = _
+
         if scalar:
             self.has_scalar = True
-            sclr_u_file = 'scalar_irradiance_total_upward.txt'
-            sclr_d_file = 'scalar_irradiance_total_downward.txt'
+            sclr_u_file = fn_fmt.format('scalar','total','up')
+            sclr_d_file = fn_fmt.format('scalar','total','down')
 
             sclr_u_path = os.path.join(basefolder, outputfolder, sclr_u_file)
             sclr_d_path = os.path.join(basefolder, outputfolder, sclr_d_file)
 
             *_, self.scalar_down = self.readirradiance(sclr_d_path)
             *_, self.scalar_up = self.readirradiance(sclr_u_path)
+
+            if not hasattr(self,'nruns'):
+                self.nruns, self.nstreams, self.ndepths, self.nwavelengths, \
+                self.depths, self.wavelengths = _
         
         if sine:
-            sine_u_file = 'sine_irradiance_total_upward.txt'
-            sine_d_file = 'sine_irradiance_total_downward.txt'
+            sine_u_file = fn_fmt.format('sine','total','up')
+            sine_d_file = fn_fmt.format('sine','total','down')
 
             sine_u_path = os.path.join(basefolder, outputfolder, sine_u_file)
             sine_d_path = os.path.join(basefolder, outputfolder, sine_d_file)
@@ -99,11 +140,19 @@ class ReadART(object):
             *_, self.sine_down = self.readirradiance(sine_d_path)
             *_, self.sine_up = self.readirradiance(sine_u_path)
 
+            if not hasattr(self,'nruns'):
+                self.nruns, self.nstreams, self.ndepths, self.nwavelengths, \
+                self.depths, self.wavelengths = _
+
         if radiance:
             outputfolder =  expname + 'Output'
             filename = os.path.join(basefolder,outputfolder,'radiance.txt')
-            self.radiance, self.polarangles,self.azimuthangles = \
+            self.radiance, self.polarangles,self.azimuthangles, *_ = \
                                         self.readradiance(filename)
+
+            if not hasattr(self,'nruns'):
+                self.nruns, self.nstreams, self.ndepths, self.nwavelengths, \
+                self.depths, self.wavelengths = _
 
 
         if iops:
@@ -207,7 +256,7 @@ class ReadART(object):
                 # read values
                 radiances[:,:,:,:,i] = rad.reshape(ndepths,nwavelengths,npolarangles,nazimuthangles)
 
-        return radiances, polarangles, azimuthangles
+        return radiances, polarangles, azimuthangles, nruns, nstreams, ndepths, nwavelengths, depths, wavelengths
 
     def readiops(self,filename):
         '''Read iops.txt, returns dict.'''
