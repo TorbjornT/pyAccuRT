@@ -59,17 +59,36 @@ class ReadART(object):
 
         outputfolder =  expname + 'Output'
 
-        diff_u_file = 'cosine_irradiance_total_upward.txt'
-        diff_d_file = 'cosine_irradiance_total_downward.txt'
-        
-        diff_u_path = os.path.join(basefolder, outputfolder, diff_u_file)
-        diff_d_path = os.path.join(basefolder, outputfolder, diff_d_file)
+        fn_fmt = '{0}_irradiance_{1}_{2}ward.txt'
 
+        if cosine:
+            self.has_cosine = True
+            cos_u_file = fn_fmt.format('cosine','total','up')
+            cos_d_file = fn_fmt.format('cosine','total','down')
         
-        self.nruns, self.nstreams, self.ndepths, self.nwavelengths, \
-            self.depths, self.wavelengths, self.updata = \
-            self.readirradiance(diff_u_path)
-        *_, self.downdata = self.readirradiance(diff_d_path)
+            cos_u_path = os.path.join(basefolder, outputfolder, cos_u_file)
+            cos_d_path = os.path.join(basefolder, outputfolder, cos_d_file)
+        
+            self.nruns, self.nstreams, self.ndepths, self.nwavelengths, \
+                self.depths, self.wavelengths, self.updata = \
+                self.readirradiance(cos_u_path)
+            *_, self.downdata = self.readirradiance(cos_d_path)
+
+        if diffuse:
+            self.has_diffuse = True
+            diff_u_file = fn_fmt.format('cosine','diffuse','up')
+            diff_d_file = fn_fmt.format('cosine','diffuse','down')
+        
+            diff_u_path = os.path.join(basefolder, outputfolder, diff_u_file)
+            diff_d_path = os.path.join(basefolder, outputfolder, diff_d_file)
+
+            *_, self.diffuse_down = self.readirradiance(diff_d_path)
+            *_, self.diffuse_up = self.readirradiance(diff_u_path)
+
+            if not hasattr(self,'nruns'):
+                self.nruns, self.nstreams, self.ndepths, self.nwavelengths, \
+                self.depths, self.wavelengths = _
+
 
         if direct:
             self.has_direct = True
