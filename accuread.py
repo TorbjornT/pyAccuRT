@@ -24,18 +24,29 @@ class ReadART(object):
     basefolder -- Folder where the main configfile is located.
         Default './'.
 
-    direct -- Boolean. If True, read in the direct irradiance in addition
-        to the diffuse. Default False.
+    cosine -- Boolean. If True (which is default), read in the
+        total cosine irradiance. 
+
+    diffuse -- Boolean. If True, read in the diffuse cosine irradiance.
+        Default False.
+
+    direct -- Boolean. If True, read in the direct cosine irradiance.
+        Default False.
 
     runvarfile -- Filename or list-like structure holding indices for repeated
         runs. Default None.
 
-    scalar -- Boolean. If True, read in scalar irradiance in addition to
-        diffuse irradiance. Default False.
+    scalar -- Boolean. If True, read in total scalar irradiance
+        Default False.
 
-    radiance -- Boolean. If True, read radiance. Default False.
+    sine -- Boolean. If True, read in total sine weighted irradiance
+        Default False.
 
-    iops -- Boolean. If True, read in iops-file into a dict. Default False.
+    radiance -- Boolean. If True, read radiance.
+        Default False.
+
+    iops -- Boolean. If True, read in iops-file into a dict.
+        Default False.
 
 
      Example:
