@@ -486,22 +486,22 @@ class ReadART(object):
 
         if layer == 'all':
             if integrated:
-                a = np.trapz(self.updata, x=self.wavelengths, axis=1) / \
-                    np.trapz(self.downdata, x=self.wavelengths, axis=1)
+                albedo = np.trapz(self.updata, x=self.wavelengths, axis=1) / \
+                         np.trapz(self.downdata, x=self.wavelengths, axis=1)
             else:
-                a = self.updata / self.downdata
+                albedo = self.updata / self.downdata
 
         else:
             incident = self.downdata[layer, :, :]
             reflected = self.updata[layer, :, :]
 
             if integrated:
-                a = np.trapz(reflected, x=self.wavelengths, axis=0) / \
-                    np.trapz(incident, x=self.wavelengths, axis=0)
+                albedo = np.trapz(reflected, x=self.wavelengths, axis=0) / \
+                         np.trapz(incident, x=self.wavelengths, axis=0)
             else:
-                a = reflected / incident
+                albedo = reflected / incident
 
-        return a
+        return albedo
 
     def transmittance(self, layers, integrated=False, wlrange=None):
         '''Calculate transmittance between levels given by 2-tuple layers.'''
