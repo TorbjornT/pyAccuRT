@@ -3,6 +3,7 @@ Class for doing stuff with output from AccuRT.
 '''
 
 import os
+import copy
 import numpy as np
 import matplotlib.pyplot as plt
 import scipy.io as sio
@@ -576,26 +577,27 @@ class ReadART(object):
                 self.scalar_up = gaussf(self.scalar_up, sigma=n, axis=1)
 
         else:
-            if self.has_cosine:
-                self.downdata_sm = gaussf(self.downdata, sigma=n, axis=1)
-                self.updata_sm = gaussf(self.updata, sigma=n, axis=1)
+            modeldata = copy.deepcopy(self)
+            if modeldata.has_cosine:
+                modeldata.downdata = gaussf(modeldata.downdata, sigma=n, axis=1)
+                modeldata.updata = gaussf(modeldata.updata, sigma=n, axis=1)
 
-            if self.has_direct:
-                self.direct_down_sm = gaussf(self.direct_down, sigma=n, axis=1)
-                self.direct_up_sm = gaussf(self.direct_up, sigma=n, axis=1)
+            if modeldata.has_direct:
+                modeldata.direct_down = gaussf(modeldata.direct_down, sigma=n, axis=1)
+                modeldata.direct_up = gaussf(modeldata.direct_up, sigma=n, axis=1)
 
-            if self.has_diffuse:
-                self.scalar_down_sm = gaussf(self.scalar_down, sigma=n, axis=1)
-                self.scalar_up_sm = gaussf(self.scalar_up, sigma=n, axis=1)
+            if modeldata.has_diffuse:
+                modeldata.scalar_down = gaussf(modeldata.scalar_down, sigma=n, axis=1)
+                modeldata.scalar_up = gaussf(modeldata.scalar_up, sigma=n, axis=1)
 
-            if self.has_scalar:
-                self.scalar_down_sm = gaussf(self.scalar_down, sigma=n, axis=1)
-                self.scalar_up_sm = gaussf(self.scalar_up, sigma=n, axis=1)
+            if modeldata.has_scalar:
+                modeldata.scalar_down = gaussf(modeldata.scalar_down, sigma=n, axis=1)
+                modeldata.scalar_up = gaussf(modeldata.scalar_up, sigma=n, axis=1)
 
-            if self.has_sine:
-                self.scalar_down_sm = gaussf(self.scalar_down, sigma=n, axis=1)
-                self.scalar_up_sm = gaussf(self.scalar_up, sigma=n, axis=1)
-
+            if modeldata.has_sine:
+                modeldata.scalar_down = gaussf(modeldata.scalar_down, sigma=n, axis=1)
+                modeldata.scalar_up = gaussf(modeldata.scalar_up, sigma=n, axis=1)
+            return modeldata
 
 
 
