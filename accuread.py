@@ -210,7 +210,7 @@ class ReadART(object):
             # read values for rest of runs
             for i in range(1, nruns):
                 # skip lines with nstreams, ndepths, etc.
-                for k in range(4):
+                for _ in range(4):
                     next(infile)
                 # read values
                 for j in range(ndepths):
@@ -254,7 +254,7 @@ class ReadART(object):
 
             for i in range(1, nruns):
                 # skip lines with nstreams, ndepths, etc.
-                for k in range(6):
+                for _ in range(6):
                     next(infile)
                 rad = np.array([float(j) for j in infile.readline().split()])
                 # read values
@@ -280,7 +280,7 @@ class ReadART(object):
             layer_depths = []
             wavelengths = []
 
-            for i in range(nruns):
+            for _ in range(nruns):
                 nlayerdepths, nwavelengths, nphasemoments = \
                     [int(x) for x in infile.readline().split()]
 
