@@ -9,6 +9,7 @@ import matplotlib.pyplot as plt
 import scipy.io as sio
 from scipy.ndimage.filters import gaussian_filter1d as gaussf
 
+
 class ReadART(object):
     '''Reads the output text files from AccuRT, and includes methods for
     calculating albedo and transmittance, and for simple plotting.
@@ -100,8 +101,7 @@ class ReadART(object):
 
             if not hasattr(self, 'nruns'):
                 self.nruns, self.nstreams, self.ndepths, self.nwavelengths, \
-                self.depths, self.wavelengths = _
-
+                    self.depths, self.wavelengths = _
 
         if direct:
             self.has_direct = True
@@ -115,7 +115,7 @@ class ReadART(object):
 
             if not hasattr(self, 'nruns'):
                 self.nruns, self.nstreams, self.ndepths, self.nwavelengths, \
-                self.depths, self.wavelengths = _
+                  self.depths, self.wavelengths = _
 
         if scalar:
             self.has_scalar = True
@@ -130,7 +130,7 @@ class ReadART(object):
 
             if not hasattr(self, 'nruns'):
                 self.nruns, self.nstreams, self.ndepths, self.nwavelengths, \
-                self.depths, self.wavelengths = _
+                  self.depths, self.wavelengths = _
 
         if sine:
             self.has_sine = True
@@ -145,18 +145,17 @@ class ReadART(object):
 
             if not hasattr(self, 'nruns'):
                 self.nruns, self.nstreams, self.ndepths, self.nwavelengths, \
-                self.depths, self.wavelengths = _
+                    self.depths, self.wavelengths = _
 
         if radiance:
             outputfolder = expname + 'Output'
             filename = os.path.join(basefolder, outputfolder, 'radiance.txt')
             self.radiance, self.polarangles, self.azimuthangles, *_ = \
-                                        self.read_radiance(filename)
+                self.read_radiance(filename)
 
             if not hasattr(self, 'nruns'):
                 self.nruns, self.nstreams, self.ndepths, self.nwavelengths, \
-                self.depths, self.wavelengths = _
-
+                   self.depths, self.wavelengths = _
 
         if iops:
             self.has_iops = True
@@ -167,7 +166,6 @@ class ReadART(object):
             mp_path = os.path.join(basefolder, outputfolder,
                                    'material_profile.txt')
             self.material_profile = self.read_material_profile(mp_path)
-
 
         if isinstance(runvarfile, str):
             try:
@@ -181,21 +179,14 @@ class ReadART(object):
             except TypeError:
                 self.runvar = 'No multi-run info provided'
 
-
         with open(os.path.join(basefolder, outputfolder,
                                'version.txt'), 'r') as ver:
             self.modelversion = ver.readline()[:-1]
-
-
-
-
-
 
     def read_irradiance(self, filename):
         '''Read output irradiance textfiles from AccuRT model.
         Returns number of runs, streams, detector depths and wavelengths,
         and numpy arrays of depths, wavelengths and irradiance'''
-
 
         with open(filename, 'r') as infile:
 
@@ -205,7 +196,8 @@ class ReadART(object):
             nstreams = int(infile.readline())
             ndepths, nwavelengths = [int(j) for j in infile.readline().split()]
             depths = np.array([float(j) for j in infile.readline().split()])
-            wavelengths = np.array([float(j) for j in infile.readline().split()])
+            wavelengths = np.array([float(j) for j
+                                    in infile.readline().split()])
 
             # initiate array for irradiances
             irradiances = np.empty((ndepths, nwavelengths, nruns))
@@ -217,7 +209,7 @@ class ReadART(object):
 
             # read values for rest of runs
             for i in range(1, nruns):
-                #skip lines with nstreams, ndepths, etc.
+                # skip lines with nstreams, ndepths, etc.
                 for k in range(4):
                     next(infile)
                 # read values
@@ -225,9 +217,8 @@ class ReadART(object):
                     irradiances[j, :, i] = \
                         [float(n) for n in infile.readline().split()]
 
-
         return nruns, nstreams, ndepths, nwavelengths, depths,\
-               wavelengths, irradiances
+            wavelengths, irradiances
 
     def read_radiance(self, filename):
         '''Read output radiance.txt from AccuRT.
@@ -239,26 +230,30 @@ class ReadART(object):
         (depth) x (wavelength) x (polar angle) x (azimuth angle) x (run number)
         '''
 
-
         with open(filename, 'r') as infile:
             nruns = int(infile.readline())
             nstreams = int(infile.readline())
             ndepths, nwavelengths, npolarangles, nazimuthangles = \
                 [int(j) for j in infile.readline().split()]
             depths = np.array([float(j) for j in infile.readline().split()])
-            wavelengths = np.array([float(j) for j in infile.readline().split()])
-            polarangles = np.array([float(j) for j in infile.readline().split()])
-            azimuthangles = np.array([float(j) for j in infile.readline().split()])
+            wavelengths = np.array([float(j) for j
+                                    in infile.readline().split()])
+            polarangles = np.array([float(j) for j
+                                    in infile.readline().split()])
+            azimuthangles = np.array([float(j) for j
+                                      in infile.readline().split()])
 
             radiances = np.empty((ndepths, nwavelengths, npolarangles,
                                   nazimuthangles, nruns))
 
             rad = np.array([float(j) for j in infile.readline().split()])
-            radiances[:, :, :, :, 0] = rad.reshape(ndepths, nwavelengths,
-                                                   npolarangles, nazimuthangles)
+            radiances[:, :, :, :, 0] = rad.reshape(ndepths,
+                                                   nwavelengths,
+                                                   npolarangles,
+                                                   nazimuthangles)
 
             for i in range(1, nruns):
-                #skip lines with nstreams, ndepths, etc.
+                # skip lines with nstreams, ndepths, etc.
                 for k in range(6):
                     next(infile)
                 rad = np.array([float(j) for j in infile.readline().split()])
@@ -269,11 +264,10 @@ class ReadART(object):
                                                        nazimuthangles)
 
         return radiances, polarangles, azimuthangles, nruns, nstreams,\
-               ndepths, nwavelengths, depths, wavelengths
+            ndepths, nwavelengths, depths, wavelengths
 
     def read_iops(self, filename):
         '''Read iops.txt, returns dict.'''
-
 
         with open(filename, 'r') as infile:
             nRuns = int(infile.readline())
@@ -288,7 +282,7 @@ class ReadART(object):
 
             for i in range(nRuns):
                 nLayerDepths, nWavelengths, nPhaseMoments = \
-                [int(x) for x in infile.readline().split()]
+                    [int(x) for x in infile.readline().split()]
 
                 layer_depths.append(np.array([float(x) for x in
                                               infile.readline().split()]))
@@ -300,7 +294,6 @@ class ReadART(object):
                 _SC = np.empty((nLayerDepths, nWavelengths))
                 _SSF = np.empty((nLayerDepths, nWavelengths))
                 _PM = np.empty((nLayerDepths, nWavelengths, nPhaseMoments))
-
 
                 for j in range(nLayerDepths):
                     for k in range(nWavelengths):
@@ -317,18 +310,19 @@ class ReadART(object):
                 scattering_scaling_factors.append(_SSF.copy())
                 phase_moments.append(_PM.copy())
 
-
             iops = dict(nRuns=nRuns,
                         layer_depths=np.squeeze(layer_depths),
                         wavelengths=np.squeeze(wavelengths),
                         total_optical_depth=np.squeeze(total_optical_depth),
-                        absorption_coefficients=np.squeeze(absorption_coefficients),
-                        scattering_coefficients=np.squeeze(scattering_coefficients),
-                        scattering_scaling_factors=np.squeeze(scattering_scaling_factors),
+                        absorption_coefficients=np.squeeze(
+                            absorption_coefficients),
+                        scattering_coefficients=np.squeeze(
+                            scattering_coefficients),
+                        scattering_scaling_factors=np.squeeze(
+                            scattering_scaling_factors),
                         phase_moments=np.squeeze(phase_moments))
 
             return iops
-
 
     def read_material_profile(self, filename):
         '''Read material_profile.txt'''
@@ -391,8 +385,6 @@ class ReadART(object):
 
         return material_profile
 
-
-
     def writefile(self, filename, output=None):
         '''output is 'matlab' or 'netcdf'.'''
 
@@ -422,14 +414,12 @@ class ReadART(object):
             if self.has_iops:
                 data['iops'] = self.iops
 
-
             sio.savemat('{0}.mat'.format(filename), data)
 
         elif output == 'netcdf':
 
             outfile = sio.netcdf_file(filename + '.nc', 'w')
             outfile.history = 'Output from AccuRT model, ' + self.modelversion
-
 
             outfile.createDimension('depth', self.ndepths)
             outfile.createDimension('wavelength', self.nwavelengths)
@@ -462,7 +452,6 @@ class ReadART(object):
 
             outfile.close()
 
-
     def plot(self, profile=False, run=1, direction='down', ax=None):
         '''Plots data from one of the runs, either as a vertical profile or
         as spectra. Either upwelling or downwelling irradiance.'''
@@ -473,7 +462,6 @@ class ReadART(object):
             data = self.updata[:, :, run-1]
         elif direction == 'down':
             data = self.downdata[:, :, run-1]
-
 
         if profile:
             ax.plot(data, self.depths)
@@ -491,17 +479,14 @@ class ReadART(object):
                       loc='best',
                       title='Depth below TOA [m]')
 
-
         return ax
-
-
 
     def albedo(self, layer, integrated=False):
         '''Calculate albedo, return array.'''
 
         if layer == 'all':
             if integrated:
-                a = np.trapz(self.updata, x=self.wavelengths, axis=1)/\
+                a = np.trapz(self.updata, x=self.wavelengths, axis=1) / \
                     np.trapz(self.downdata, x=self.wavelengths, axis=1)
             else:
                 a = self.updata / self.downdata
@@ -511,7 +496,7 @@ class ReadART(object):
             reflected = self.updata[layer, :, :]
 
             if integrated:
-                a = np.trapz(reflected, x=self.wavelengths, axis=0)/\
+                a = np.trapz(reflected, x=self.wavelengths, axis=0) / \
                     np.trapz(incident, x=self.wavelengths, axis=0)
             else:
                 a = reflected / incident
@@ -526,29 +511,28 @@ class ReadART(object):
 
         if integrated:
             if wlrange is None:
-                transmittance = np.trapz(outgoing, x=self.wavelengths, axis=0)/\
+                transm = np.trapz(outgoing, x=self.wavelengths, axis=0) / \
                     np.trapz(incident, x=self.wavelengths, axis=0)
             else:
                 lower_wl = np.abs(self.wavelengths-wlrange[0]).argmin()
                 upper_wl = np.abs(self.wavelengths-wlrange[1]).argmin()
-                if (self.wavelengths[lower_wl] > wlrange[0]) and (lower_wl > 0):
+                if (self.wavelengths[lower_wl] > wlrange[0])\
+                        and (lower_wl > 0):
                     lower_wl -= 1
-                if (self.wavelengths[upper_wl] < wlrange[1]):
+                if self.wavelengths[upper_wl] < wlrange[1]:
                     upper_wl += 2
                 else:
                     upper_wl += 1
 
-                transmittance = \
+                transm = \
                     np.trapz(outgoing[lower_wl:upper_wl, :],
-                             x=self.wavelengths[lower_wl:upper_wl], axis=0)/\
+                             x=self.wavelengths[lower_wl:upper_wl], axis=0) / \
                     np.trapz(incident[lower_wl:upper_wl, :],
                              x=self.wavelengths[lower_wl:upper_wl], axis=0)
         else:
-            transmittance = outgoing / incident
+            transm = outgoing / incident
 
-        return transmittance
-
-
+        return transm
 
     def gauss_smooth(self, n=5, inplace=False):
         '''Smooth data with a Gaussian filter.
@@ -579,34 +563,41 @@ class ReadART(object):
         else:
             modeldata = copy.deepcopy(self)
             if modeldata.has_cosine:
-                modeldata.downdata = gaussf(modeldata.downdata, sigma=n, axis=1)
+                modeldata.downdata = gaussf(modeldata.downdata,
+                                            sigma=n, axis=1)
                 modeldata.updata = gaussf(modeldata.updata, sigma=n, axis=1)
 
             if modeldata.has_direct:
-                modeldata.direct_down = gaussf(modeldata.direct_down, sigma=n, axis=1)
-                modeldata.direct_up = gaussf(modeldata.direct_up, sigma=n, axis=1)
+                modeldata.direct_down = gaussf(modeldata.direct_down,
+                                               sigma=n, axis=1)
+                modeldata.direct_up = gaussf(modeldata.direct_up,
+                                             sigma=n, axis=1)
 
             if modeldata.has_diffuse:
-                modeldata.scalar_down = gaussf(modeldata.scalar_down, sigma=n, axis=1)
-                modeldata.scalar_up = gaussf(modeldata.scalar_up, sigma=n, axis=1)
+                modeldata.scalar_down = gaussf(modeldata.scalar_down,
+                                               sigma=n, axis=1)
+                modeldata.scalar_up = gaussf(modeldata.scalar_up,
+                                             sigma=n, axis=1)
 
             if modeldata.has_scalar:
-                modeldata.scalar_down = gaussf(modeldata.scalar_down, sigma=n, axis=1)
-                modeldata.scalar_up = gaussf(modeldata.scalar_up, sigma=n, axis=1)
+                modeldata.scalar_down = gaussf(modeldata.scalar_down,
+                                               sigma=n, axis=1)
+                modeldata.scalar_up = gaussf(modeldata.scalar_up,
+                                             sigma=n, axis=1)
 
             if modeldata.has_sine:
-                modeldata.scalar_down = gaussf(modeldata.scalar_down, sigma=n, axis=1)
-                modeldata.scalar_up = gaussf(modeldata.scalar_up, sigma=n, axis=1)
+                modeldata.scalar_down = gaussf(modeldata.scalar_down,
+                                               sigma=n, axis=1)
+                modeldata.scalar_up = gaussf(modeldata.scalar_up,
+                                             sigma=n, axis=1)
             return modeldata
-
-
-
 
     def calc_heatingrate(self):
         '''Calculate readiative heating rate using Gershun's law.'''
         if not (self.has_scalar and self.has_iops):
             raise AttributeError(
-                'Scalar irradiance and IOPs not available, you need scalar=True, iops=True')
+                ('Scalar irradiance and IOPs not available,'
+                 ' you need scalar=True, iops=True'))
         absorbed_energy = np.empty_like(self.scalar_down)
         for k in range(absorbed_energy.shape[2]):
             if absorbed_energy.shape[2] == 1:
@@ -615,7 +606,8 @@ class ReadART(object):
             else:
                 layerdepths = self.iops['layer_depths'][k]
                 abscoeff = self.iops['absorption_coefficients'][k]
-            layerind = [np.where(layerdepths >= dd)[0][0] for dd in self.depths]
+            layerind = [np.where(layerdepths >= dd)[0][0]
+                        for dd in self.depths]
             for i, j in enumerate(layerind):
                 absorbed_energy[i, :, k] = abscoeff[j] * \
                     (self.scalar_down[i, :, k] + self.scalar_up[i, :, k])
