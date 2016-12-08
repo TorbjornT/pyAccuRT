@@ -270,7 +270,7 @@ class ReadART(object):
         '''Read iops.txt, returns dict.'''
 
         with open(filename, 'r') as infile:
-            nRuns = int(infile.readline())
+            nruns = int(infile.readline())
 
             total_optical_depth = []
             absorption_coefficients = []
@@ -280,8 +280,8 @@ class ReadART(object):
             layer_depths = []
             wavelengths = []
 
-            for i in range(nRuns):
-                nLayerDepths, nWavelengths, nPhaseMoments = \
+            for i in range(nruns):
+                nlayerdepths, nwavelengths, nphasemoments = \
                     [int(x) for x in infile.readline().split()]
 
                 layer_depths.append(np.array([float(x) for x in
@@ -289,14 +289,14 @@ class ReadART(object):
                 wavelengths.append(np.array([float(x) for x in
                                              infile.readline().split()]))
 
-                _ToD = np.empty((nLayerDepths, nWavelengths))
-                _AC = np.empty((nLayerDepths, nWavelengths))
-                _SC = np.empty((nLayerDepths, nWavelengths))
-                _SSF = np.empty((nLayerDepths, nWavelengths))
-                _PM = np.empty((nLayerDepths, nWavelengths, nPhaseMoments))
+                _ToD = np.empty((nlayerdepths, nwavelengths))
+                _AC = np.empty((nlayerdepths, nwavelengths))
+                _SC = np.empty((nlayerdepths, nwavelengths))
+                _SSF = np.empty((nlayerdepths, nwavelengths))
+                _PM = np.empty((nlayerdepths, nwavelengths, nphasemoments))
 
-                for j in range(nLayerDepths):
-                    for k in range(nWavelengths):
+                for j in range(nlayerdepths):
+                    for k in range(nwavelengths):
                         line = infile.readline().split()
                         _ToD[j, k] = float(line.pop(0))
                         _AC[j, k] = float(line.pop(0))
@@ -310,7 +310,7 @@ class ReadART(object):
                 scattering_scaling_factors.append(_SSF.copy())
                 phase_moments.append(_PM.copy())
 
-            iops = dict(nRuns=nRuns,
+            iops = dict(nruns=nruns,
                         layer_depths=np.squeeze(layer_depths),
                         wavelengths=np.squeeze(wavelengths),
                         total_optical_depth=np.squeeze(total_optical_depth),
@@ -398,7 +398,7 @@ class ReadART(object):
             data = dict(up=self.updata,
                         down=self.downdata,
                         nRuns=self.nruns,
-                        nWavelengths=self.nwavelengths,
+                        nwavelengths=self.nwavelengths,
                         nDepths=self.ndepths,
                         nStreams=self.nstreams,
                         wavelengths=self.wavelengths,
@@ -456,7 +456,7 @@ class ReadART(object):
         '''Plots data from one of the runs, either as a vertical profile or
         as spectra. Either upwelling or downwelling irradiance.'''
         if ax is None:
-            fig, ax = plt.subplots()
+            _, ax = plt.subplots()
 
         if direction == 'up':
             data = self.updata[:, :, run-1]

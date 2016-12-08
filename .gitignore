@@ -20,3 +20,4 @@ accumake.py
 generatetemplates.py
 materialdicts.p
 materials.py
+.pylintrc
