@@ -7,5 +7,5 @@ setup(name='pyaccurt',
       author_email='totaskj@gmail.com',
       url='https://github.com/TorbjornT/pyAccuRT',
       license='MIT',
-      py_modules=['accuread','file_reading']
+      packages=['accuread']
       )
