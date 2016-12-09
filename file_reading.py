@@ -1,4 +1,5 @@
-def read_irradiance(self, filename):
+import numpy as np
+def read_irradiance(filename):
     '''Read output irradiance textfiles from AccuRT model.
     Returns number of runs, streams, detector depths and wavelengths,
     and numpy arrays of depths, wavelengths and irradiance'''
@@ -35,7 +36,7 @@ def read_irradiance(self, filename):
     return nruns, nstreams, ndepths, nwavelengths, depths,\
         wavelengths, irradiances
 
-def read_radiance(self, filename):
+def read_radiance(filename):
     '''Read output radiance.txt from AccuRT.
     Returns number of runs, streams, detector depths and wavelengths,
     and numpy arrays of dephts, wavelengths, polar and azimuth angles
@@ -81,7 +82,7 @@ def read_radiance(self, filename):
     return radiances, polarangles, azimuthangles, nruns, nstreams,\
         ndepths, nwavelengths, depths, wavelengths
 
-def read_iops(self, filename):
+def read_iops(filename):
     '''Read iops.txt, returns dict.'''
 
     with open(filename, 'r') as infile:
@@ -139,7 +140,7 @@ def read_iops(self, filename):
 
         return iops
 
-def read_material_profile(self, filename):
+def read_material_profile(filename):
     '''Read material_profile.txt'''
     material_profile = []
     with open(filename) as material_file:
