@@ -194,9 +194,7 @@ class ReadART(object):
             output = 'netcdf'
             filename = os.path.splitext(filename)[0]
         if output == 'matlab':
-            data = dict(up=self.updata,
-                        down=self.downdata,
-                        nRuns=self.nruns,
+            data = dict(nRuns=self.nruns,
                         nwavelengths=self.nwavelengths,
                         nDepths=self.ndepths,
                         nStreams=self.nstreams,
@@ -204,12 +202,21 @@ class ReadART(object):
                         depths=self.depths,
                         runvar=self.runvar,
                         modelversion=self.modelversion)
+            if self.has_cosine:
+                data['up'] = self.updata
+                data['down'] = self.downdata
             if self.has_scalar:
                 data['scalar_up'] = self.scalar_up
                 data['scalar_down'] = self.scalar_down
             if self.has_direct:
                 data['direct_up'] = self.direct_up
                 data['direct_down'] = self.direct_down
+            if self.has_diffuse:
+                data['diffuse_up'] = self.diffuse_up
+                data['diffuse_down'] = self.diffuse_down
+            if self.has_sine:
+                data['sine_up'] = self.sine_up
+                data['sine_down'] = self.sine_down
             if self.has_iops:
                 data['iops'] = self.iops
 
