@@ -8,7 +8,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import scipy.io as sio
 from scipy.ndimage.filters import gaussian_filter1d as gaussf
-from file_reading import *
+from .file_reading import *
 
 class ReadART(object):
     '''Reads the output text files from AccuRT, and includes methods for
