@@ -85,8 +85,8 @@ class ReadART(object):
 
             self.nruns, self.nstreams, self.ndepths, self.nwavelengths, \
                 self.depths, self.wavelengths, self.updata = \
-                self.read_irradiance(cos_u_path)
-            *_, self.downdata = self.read_irradiance(cos_d_path)
+                read_irradiance(cos_u_path)
+            *_, self.downdata = read_irradiance(cos_d_path)
 
         if diffuse:
             self.has_diffuse = True
@@ -96,8 +96,8 @@ class ReadART(object):
             diff_u_path = os.path.join(basefolder, outputfolder, diff_u_file)
             diff_d_path = os.path.join(basefolder, outputfolder, diff_d_file)
 
-            *_, self.diffuse_down = self.read_irradiance(diff_d_path)
-            *_, self.diffuse_up = self.read_irradiance(diff_u_path)
+            *_, self.diffuse_down = read_irradiance(diff_d_path)
+            *_, self.diffuse_up = read_irradiance(diff_u_path)
 
             if not hasattr(self, 'nruns'):
                 self.nruns, self.nstreams, self.ndepths, self.nwavelengths, \
@@ -110,8 +110,8 @@ class ReadART(object):
 
             dir_u_path = os.path.join(basefolder, outputfolder, dir_u_file)
             dir_d_path = os.path.join(basefolder, outputfolder, dir_d_file)
-            *_, self.direct_down = self.read_irradiance(dir_d_path)
-            *_, self.direct_up = self.read_irradiance(dir_u_path)
+            *_, self.direct_down = read_irradiance(dir_d_path)
+            *_, self.direct_up = read_irradiance(dir_u_path)
 
             if not hasattr(self, 'nruns'):
                 self.nruns, self.nstreams, self.ndepths, self.nwavelengths, \
@@ -125,8 +125,8 @@ class ReadART(object):
             sclr_u_path = os.path.join(basefolder, outputfolder, sclr_u_file)
             sclr_d_path = os.path.join(basefolder, outputfolder, sclr_d_file)
 
-            *_, self.scalar_down = self.read_irradiance(sclr_d_path)
-            *_, self.scalar_up = self.read_irradiance(sclr_u_path)
+            *_, self.scalar_down = read_irradiance(sclr_d_path)
+            *_, self.scalar_up = read_irradiance(sclr_u_path)
 
             if not hasattr(self, 'nruns'):
                 self.nruns, self.nstreams, self.ndepths, self.nwavelengths, \
@@ -140,8 +140,8 @@ class ReadART(object):
             sine_u_path = os.path.join(basefolder, outputfolder, sine_u_file)
             sine_d_path = os.path.join(basefolder, outputfolder, sine_d_file)
 
-            *_, self.sine_down = self.read_irradiance(sine_d_path)
-            *_, self.sine_up = self.read_irradiance(sine_u_path)
+            *_, self.sine_down = read_irradiance(sine_d_path)
+            *_, self.sine_up = read_irradiance(sine_u_path)
 
             if not hasattr(self, 'nruns'):
                 self.nruns, self.nstreams, self.ndepths, self.nwavelengths, \
@@ -151,7 +151,7 @@ class ReadART(object):
             outputfolder = expname + 'Output'
             filename = os.path.join(basefolder, outputfolder, 'radiance.txt')
             self.radiance, self.polarangles, self.azimuthangles, *_ = \
-                self.read_radiance(filename)
+                read_radiance(filename)
 
             if not hasattr(self, 'nruns'):
                 self.nruns, self.nstreams, self.ndepths, self.nwavelengths, \
@@ -160,12 +160,12 @@ class ReadART(object):
         if iops:
             self.has_iops = True
             iops_path = os.path.join(basefolder, outputfolder, 'iops.txt')
-            self.iops = self.read_iops(iops_path)
+            self.iops = read_iops(iops_path)
 
         if material_profile:
             mp_path = os.path.join(basefolder, outputfolder,
                                    'material_profile.txt')
-            self.material_profile = self.read_material_profile(mp_path)
+            self.material_profile = read_material_profile(mp_path)
 
         if isinstance(runvarfile, str):
             try:
