@@ -237,24 +237,85 @@ class ReadART(object):
             multirun = outfile.createVariable('runvar', 'float', ('multirun',))
 
             depths[:] = self.depths
-            depths.unit = 'm'
+            depths.unit = 'metre'
             depths.reference = 'Top of Atmosphere'
+            depths.description = 'Distance from top of atmosphere'
             wavelengths[:] = self.wavelengths
+            wavelengths.unit = 'nanometre'
+
             if isinstance(self.runvar, str):
                 multirun[:] = np.arange(self.updata.shape[2])
             else:
                 multirun[:] = self.runvar
 
-            upward_irradiance = \
-                outfile.createVariable('upward_irradiance', 'float',
-                                       ('depth', 'wavelength', 'multirun'))
-
-            upward_irradiance[:, :, :] = self.updata
-            downward_irradiance = \
-                outfile.createVariable('downward_irradiance', 'float',
-                                       ('depth', 'wavelength', 'multirun'))
-
-            downward_irradiance[:, :, :] = self.downdata
+            if self.has_cosine:
+                cos_up = \
+                    outfile.createVariable('cosine_upward', 'float',
+                                           ('depth', 'wavelength', 'multirun'))
+                cos_up[:, :, :] = self.updata
+                cos_down = \
+                    outfile.createVariable('cosine_downward', 'float',
+                                           ('depth', 'wavelength', 'multirun'))
+                cos_down[:, :, :] = self.downdata
+                cos_up.unit = 'Watt per square metre'
+                cos_down.unit = 'Watt per square metre'
+                cos_up.description = 'Upward total planar irradiance'
+                cos_down.description = 'Downward total planar irradiance'
+            if self.has_direct:
+                dir_up = \
+                    outfile.createVariable('direct_upward', 'float',
+                                           ('depth', 'wavelength', 'multirun'))
+                dir_up[:, :, :] = self.direct_up
+                dir_down = \
+                    outfile.createVariable('direct_downward', 'float',
+                                           ('depth', 'wavelength', 'multirun'))
+                dir_down[:, :, :] = self.direct_down
+                dir_up.unit = 'Watt per square metre'
+                dir_down.unit = 'Watt per square metre'
+                dir_up.description = 'Upward planar irradiance, direct beam'
+                dir_down.description = 'Downward planar irradiance, '\
+                                       'direct beam'
+            if self.has_diffuse:
+                diff_up = \
+                    outfile.createVariable('diffuse_upward', 'float',
+                                           ('depth', 'wavelength', 'multirun'))
+                diff_up[:, :, :] = self.diffuse_up
+                diff_down = \
+                    outfile.createVariable('diffuse_downward', 'float',
+                                           ('depth', 'wavelength', 'multirun'))
+                diff_down[:, :, :] = self.diffuse_down
+                diff_up.unit = 'Watt per square metre'
+                diff_down.unit = 'Watt per square metre'
+                diff_up.description = 'Upward planar irradiance, diffuse field'
+                diff_down.description = 'Downward planar irradiance, '\
+                                        'diffuse field'
+            if self.has_sine:
+                sine_up = \
+                    outfile.createVariable('sine_upward', 'float',
+                                           ('depth', 'wavelength', 'multirun'))
+                sine_up[:, :, :] = self.sine_up
+                sine_down = \
+                    outfile.createVariable('sine_downward', 'float',
+                                           ('depth', 'wavelength', 'multirun'))
+                sine_down[:, :, :] = self.sine_down
+                sine_up.unit = 'Watt per square metre'
+                sine_down.unit = 'Watt per square metre'
+                sine_up.description = 'Upward total sine-weighted irradiance'
+                sine_down.description = 'Downward total sine-weighted '\
+                                        'irradiance'
+            if self.has_scalar:
+                sclr_up = \
+                    outfile.createVariable('scalar_upward', 'float',
+                                           ('depth', 'wavelength', 'multirun'))
+                sclr_up[:, :, :] = self.scalar_up
+                sclr_down = \
+                    outfile.createVariable('scalar_downward', 'float',
+                                           ('depth', 'wavelength', 'multirun'))
+                sclr_down[:, :, :] = self.scalar_down
+                sclr_up.unit = 'Watt per square metre'
+                sclr_down.unit = 'Watt per square metre'
+                sclr_up.description = 'Upward total scalar irradiance'
+                sclr_down.description = 'Downward total scalar irradiance'
 
             outfile.close()
 
