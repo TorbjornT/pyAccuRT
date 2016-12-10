@@ -15,3 +15,5 @@ class TestMaterialProfileWithIce(unittest.TestCase):
         self.assertTrue('Icebubbles' in self.MP[0][1])
         self.assertTrue('Pureice' in self.MP[0][1])
 
+if __name__ == '__main__':
+    unittest.main()

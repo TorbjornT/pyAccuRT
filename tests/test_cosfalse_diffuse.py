@@ -21,6 +21,5 @@ class TestAccuRead(unittest.TestCase):
         wl = self.PA.wavelengths
         self.assertTrue(np.array_equal(np.array([400,500,600,700]),wl))
 
-
 if __name__ == '__main__':
     unittest.main()

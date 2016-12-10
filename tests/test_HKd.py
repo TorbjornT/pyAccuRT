@@ -21,3 +21,6 @@ class TestCalculatedVals(unittest.TestCase):
     def test_Kdint_size(self):
         Kd = self.PA.diffuse_attenuation(integrated=True)
         self.assertEqual((2,2),Kd.shape)
+
+if __name__ == '__main__':
+    unittest.main()
