@@ -11,6 +11,7 @@ from scipy.ndimage.filters import gaussian_filter1d as gaussf
 from .file_reading import read_irradiance, read_radiance, \
     read_material_profile, read_iops
 
+
 class ReadART(object):
     '''Reads the output text files from AccuRT, and includes methods for
     calculating albedo and transmittance, and for simple plotting.
@@ -184,7 +185,6 @@ class ReadART(object):
                                'version.txt'), 'r') as ver:
             self.modelversion = ver.readline()[:-1]
 
-
     def writefile(self, filename, output=None):
         '''output is 'matlab' or 'netcdf'.'''
 
@@ -224,7 +224,6 @@ class ReadART(object):
             sio.savemat('{0}.mat'.format(filename), data)
 
         elif output == 'netcdf':
-
             outfile = sio.netcdf_file(filename + '.nc', 'w')
             outfile.history = 'Output from AccuRT model, ' + self.modelversion
 
@@ -402,62 +401,65 @@ class ReadART(object):
 
         return transm
 
-    def gauss_smooth(self, n=5, inplace=False):
+    def gauss_smooth(self, sigma=5, inplace=False):
         '''Smooth data with a Gaussian filter.
         '''
 
         if inplace:
-
             if self.has_cosine:
-                self.downdata = gaussf(self.downdata, sigma=n, axis=1)
-                self.updata = gaussf(self.updata, sigma=n, axis=1)
+                self.downdata = gaussf(self.downdata, sigma=sigma, axis=1)
+                self.updata = gaussf(self.updata, sigma=sigma, axis=1)
 
             if self.has_direct:
-                self.direct_down = gaussf(self.direct_down, sigma=n, axis=1)
-                self.direct_up = gaussf(self.direct_up, sigma=n, axis=1)
+                self.direct_down = gaussf(self.direct_down,
+                                          sigma=sigma, axis=1)
+                self.direct_up = gaussf(self.direct_up, sigma=sigma, axis=1)
 
             if self.has_diffuse:
-                self.scalar_down = gaussf(self.scalar_down, sigma=n, axis=1)
-                self.scalar_up = gaussf(self.scalar_up, sigma=n, axis=1)
+                self.diffuse_down = gaussf(self.diffuse_down,
+                                           sigma=sigma, axis=1)
+                self.diffuse_up = gaussf(self.diffuse_up, sigma=sigma, axis=1)
 
             if self.has_scalar:
-                self.scalar_down = gaussf(self.scalar_down, sigma=n, axis=1)
-                self.scalar_up = gaussf(self.scalar_up, sigma=n, axis=1)
+                self.scalar_down = gaussf(self.scalar_down,
+                                          sigma=sigma, axis=1)
+                self.scalar_up = gaussf(self.scalar_up, sigma=sigma, axis=1)
 
             if self.has_sine:
-                self.scalar_down = gaussf(self.scalar_down, sigma=n, axis=1)
-                self.scalar_up = gaussf(self.scalar_up, sigma=n, axis=1)
+                self.sine_down = gaussf(self.sine_down, sigma=sigma, axis=1)
+                self.sine_up = gaussf(self.sine_up, sigma=sigma, axis=1)
 
         else:
             modeldata = copy.deepcopy(self)
             if modeldata.has_cosine:
                 modeldata.downdata = gaussf(modeldata.downdata,
-                                            sigma=n, axis=1)
-                modeldata.updata = gaussf(modeldata.updata, sigma=n, axis=1)
+                                            sigma=sigma, axis=1)
+                modeldata.updata = gaussf(modeldata.updata,
+                                          sigma=sigma, axis=1)
 
             if modeldata.has_direct:
                 modeldata.direct_down = gaussf(modeldata.direct_down,
-                                               sigma=n, axis=1)
+                                               sigma=sigma, axis=1)
                 modeldata.direct_up = gaussf(modeldata.direct_up,
-                                             sigma=n, axis=1)
+                                             sigma=sigma, axis=1)
 
             if modeldata.has_diffuse:
-                modeldata.scalar_down = gaussf(modeldata.scalar_down,
-                                               sigma=n, axis=1)
-                modeldata.scalar_up = gaussf(modeldata.scalar_up,
-                                             sigma=n, axis=1)
+                modeldata.diffuse_down = gaussf(modeldata.diffuse_down,
+                                                sigma=sigma, axis=1)
+                modeldata.diffuse_up = gaussf(modeldata.diffuse_up,
+                                              sigma=sigma, axis=1)
 
             if modeldata.has_scalar:
                 modeldata.scalar_down = gaussf(modeldata.scalar_down,
-                                               sigma=n, axis=1)
+                                               sigma=sigma, axis=1)
                 modeldata.scalar_up = gaussf(modeldata.scalar_up,
-                                             sigma=n, axis=1)
+                                             sigma=sigma, axis=1)
 
             if modeldata.has_sine:
-                modeldata.scalar_down = gaussf(modeldata.scalar_down,
-                                               sigma=n, axis=1)
-                modeldata.scalar_up = gaussf(modeldata.scalar_up,
-                                             sigma=n, axis=1)
+                modeldata.sine_down = gaussf(modeldata.sine_down,
+                                             sigma=sigma, axis=1)
+                modeldata.sine_up = gaussf(modeldata.sine_up,
+                                           sigma=sigma, axis=1)
             return modeldata
 
     def calc_heatingrate(self):
