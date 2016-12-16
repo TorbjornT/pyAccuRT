@@ -1,4 +1,6 @@
 import numpy as np
+
+
 def read_irradiance(filename):
     '''Read output irradiance textfiles from AccuRT model.
     Returns number of runs, streams, detector depths and wavelengths,
@@ -35,6 +37,7 @@ def read_irradiance(filename):
 
     return nruns, nstreams, ndepths, nwavelengths, depths,\
         wavelengths, irradiances
+
 
 def read_radiance(filename):
     '''Read output radiance.txt from AccuRT.
@@ -81,6 +84,7 @@ def read_radiance(filename):
 
     return radiances, polarangles, azimuthangles, nruns, nstreams,\
         ndepths, nwavelengths, depths, wavelengths
+
 
 def read_iops(filename):
     '''Read iops.txt, returns dict.'''
@@ -139,6 +143,7 @@ def read_iops(filename):
                     phase_moments=np.squeeze(phase_moments))
 
         return iops
+
 
 def read_material_profile(filename):
     '''Read material_profile.txt'''
