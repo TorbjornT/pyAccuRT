@@ -162,7 +162,6 @@ def read_material_profile(filename):
             material_profile.append([])
             while True:
                 line = material_file.readline()
-                print(line)
                 if line.startswith('=') or \
                    line.startswith('-') or \
                    line.startswith('~'):
