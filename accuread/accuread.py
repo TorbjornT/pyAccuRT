@@ -49,7 +49,10 @@ class ReadART(object):
     radiance -- Boolean. If True, read radiance.
         Default False.
 
-    iops -- Boolean. If True, read in iops-file into a dict.
+    iops -- Boolean. If True, read iops-file into a dict.
+        Default False.
+
+    material_profile -- Boolean. If True, read material_profile-file.
         Default False.
 
 
