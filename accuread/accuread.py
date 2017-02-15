@@ -184,6 +184,8 @@ class ReadART(object):
             except FileNotFoundError:
                 print('{0} not a valid filename'.format(runvarfile))
                 self.runvar = runvarfile
+        elif runvarfile is None:
+            self.runvar = np.arange(self.nruns)
         else:
             try:
                 self.runvar = np.array(runvarfile)
