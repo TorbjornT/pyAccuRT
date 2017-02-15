@@ -188,6 +188,37 @@ class ReadART(object):
                                'version.txt'), 'r') as ver:
             self.modelversion = ver.readline()[:-1]
 
+    def __repr__(self):
+        txt = ['AccuRT output from {0}'.format(self.expname)]
+        if hasattr(self, 'nruns'):
+            txt.append('Number of runs: {0}'.format(self.nruns))
+        if hasattr(self, 'nwavelengths'):
+            txt.append('Wavelengths: {0} from {1}nm to {2}nm'.format(
+                self.nwavelengths,
+                self.wavelengths.min(),
+                self.wavelengths.max()
+                ))
+        if hasattr(self, 'ndepths'):
+            txt.append('Detectors: {0}'.format(self.ndepths))
+        txt.append('Output:')
+        if self.has_cosine:
+            txt.append(' - Total cosine irradiance')
+        if self.has_direct:
+            txt.append(' - Direct cosine irradiance')
+        if self.has_diffuse:
+            txt.append(' - Diffuse cosine irradiance')
+        if self.has_scalar:
+            txt.append(' - Total scalar irradiance')
+        if self.has_sine:
+            txt.append(' - Total sine irradiance')
+        if self.has_radiance:
+            txt.append(' - Radiance')
+        if self.has_materialprofile:
+            txt.append(' - Material profile')
+        if self.has_iops:
+            txt.append(' - IOPs')
+        return '\n'.join(txt)
+
     def writefile(self, filename, output=None):
         '''output is 'matlab' or 'netcdf'.'''
 
