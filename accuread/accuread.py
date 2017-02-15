@@ -4,6 +4,7 @@ Class for doing stuff with output from AccuRT.
 
 import os
 import copy
+from collections import OrderedDict
 import numpy as np
 import matplotlib.pyplot as plt
 import scipy.io as sio
@@ -237,12 +238,12 @@ class ReadART(object):
             output = 'netcdf'
             filename = os.path.splitext(filename)[0]
         if output == 'matlab':
-            data = dict(nRuns=self.nruns,
+            data = OrderedDict(nRuns=self.nruns,
                         nwavelengths=self.nwavelengths,
                         nDepths=self.ndepths,
                         nStreams=self.nstreams,
                         wavelengths=self.wavelengths,
-                        depths=self.depths,
+                        depths=self.depths[:,np.newaxis],
                         runvar=self.runvar,
                         modelversion=self.modelversion)
             if self.has_cosine:
@@ -262,6 +263,16 @@ class ReadART(object):
                 data['sine_down'] = self.sine_down
             if self.has_iops:
                 data['iops'] = self.iops
+            if self.has_radiance:
+                data['radiance'] = self.radiance
+                data['README_radiance'] = '5D matrix of radiances. '\
+                  'The dimensions of the matrix are (depth) x (wavelength) '\
+                  'x (polar angle) x (azimuth angle) x (run number).'
+            if (self.has_cosine or self.has_sine or self.has_diffuse
+                                or self.has_direct or self.has_scalar):
+                data['README_irradiance'] = 'Irradiance matrices are 3D. '\
+                  'The dimensions of the matrices are (depth) x (wavelength) '\
+                  'x (run number).'
 
             sio.savemat('{0}.mat'.format(filename), data)
 
