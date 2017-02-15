@@ -57,7 +57,8 @@ class ReadART(object):
 
 
      Example:
-     >>> a = pyAccu('atmOcean')
+     >>> import accuread as ar
+     >>> a = ar.ReadART('atmOcean')
      >>> transm = a.transmittance(layers=(2,4),integrated=True)
      >>> a.plot()
      >>> a.plot(profile=True)
