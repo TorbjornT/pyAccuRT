@@ -45,7 +45,7 @@ def read_radiance(filename):
     and numpy arrays of dephts, wavelengths, polar and azimuth angles
     and radiance.
 
-    Dimensions of radiance array is
+    Dimensions of radiance array are
     (depth) x (wavelength) x (polar angle) x (azimuth angle) x (run number)
     '''
 
