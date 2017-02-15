@@ -76,8 +76,11 @@ class ReadART(object):
         self.has_scalar = False
         self.has_sine = False
         self.has_iops = False
+        self.has_radiance = False
+        self.has_materialprofile = False
+        self.expname = expname
 
-        outputfolder = expname + 'Output'
+        outputfolder = self.expname + 'Output'
 
         fn_fmt = '{0}_irradiance_{1}_{2}ward.txt'
 
