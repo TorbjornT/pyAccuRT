@@ -157,6 +157,7 @@ class ReadART(object):
                     self.depths, self.wavelengths = _
 
         if radiance:
+            self.has_radiance = True
             outputfolder = expname + 'Output'
             filename = os.path.join(basefolder, outputfolder, 'radiance.txt')
             self.radiance, self.polarangles, self.azimuthangles, *_ = \
@@ -172,6 +173,7 @@ class ReadART(object):
             self.iops = read_iops(iops_path)
 
         if material_profile:
+            self.has_materialprofile = True
             mp_path = os.path.join(basefolder, outputfolder,
                                    'material_profile.txt')
             self.material_profile = read_material_profile(mp_path)
