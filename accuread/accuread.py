@@ -238,14 +238,15 @@ class ReadART(object):
             output = 'netcdf'
             filename = os.path.splitext(filename)[0]
         if output == 'matlab':
-            data = OrderedDict(nRuns=self.nruns,
-                        nwavelengths=self.nwavelengths,
-                        nDepths=self.ndepths,
-                        nStreams=self.nstreams,
-                        wavelengths=self.wavelengths,
-                        depths=self.depths[:,np.newaxis],
-                        runvar=self.runvar,
-                        modelversion=self.modelversion)
+            data = OrderedDict()
+            data['nRuns']=self.nruns
+            data['nwavelengths']=self.nwavelengths
+            data['nDepths']=self.ndepths
+            data['nStreams']=self.nstreams
+            data['wavelengths']=self.wavelengths
+            data['depths']=self.depths[:,np.newaxis]
+            data['runvar']=self.runvar
+            data['modelversion']=self.modelversion
             if self.has_cosine:
                 data['up'] = self.updata
                 data['down'] = self.downdata
@@ -264,6 +265,8 @@ class ReadART(object):
             if self.has_iops:
                 data['iops'] = self.iops
             if self.has_radiance:
+                data['polarangles'] = self.polarangles
+                data['azimuthangles'] = self.azimuthangles
                 data['radiance'] = self.radiance
                 data['README_radiance'] = '5D matrix of radiances. '\
                   'The dimensions of the matrix are (depth) x (wavelength) '\
