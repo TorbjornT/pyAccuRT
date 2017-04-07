@@ -1,17 +1,16 @@
 *#*
 *~
 __*/
-<<<<<<< HEAD
 build/
 *.pyc
-=======
-*.pyc
-build/
->>>>>>> dev
 /tests/testdata/demo1
 /tests/testdata/demo1Materials/
 /tests/testdata/materialprofileice
 /tests/testdata/materialprofileiceMaterials/
+/tests/testdata/nocosine
+/tests/testdata/nocosineMaterials/
+/tests/testdata/varstreams
+/tests/testdata/varstreamsMaterials/
 /tests/testdata/gasIOP_srf.txt
 *.directory
 /tests/testdata/*.m
@@ -21,3 +20,4 @@ generatetemplates.py
 materialdicts.p
 materials.py
 .pylintrc
+
