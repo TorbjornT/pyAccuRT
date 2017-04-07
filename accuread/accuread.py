@@ -172,6 +172,9 @@ class ReadART(object):
             self.has_iops = True
             iops_path = os.path.join(basefolder, outputfolder, 'iops.txt')
             self.iops = read_iops(iops_path)
+            if not hasattr(self, 'nruns'):
+                self.nruns = self.iops['nruns']
+                self.wavelengths = self.iops['wavelengths']
 
         if material_profile:
             self.has_materialprofile = True
