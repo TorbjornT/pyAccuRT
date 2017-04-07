@@ -130,17 +130,30 @@ def read_iops(filename):
             scattering_scaling_factors.append(_SSF.copy())
             phase_moments.append(_PM.copy())
 
+        if nruns > 1:
+            npm = phase_moments[0].shape[-1]
+            eq_npm = True
+            for i in range(1,len(phase_moments)):
+                if phase_moments[i].shape[-1] != npm:
+                    eq_npm = False
+                    break
+            if eq_npm:
+                phase_moments = np.array(phase_moments)
+        else:
+            phase_moments = phase_moments[0]
+
+
         iops = dict(nruns=nruns,
-                    layer_depths=np.squeeze(layer_depths),
-                    wavelengths=np.squeeze(wavelengths),
-                    total_optical_depth=np.squeeze(total_optical_depth),
-                    absorption_coefficients=np.squeeze(
+                    layer_depths=np.array(layer_depths),
+                    wavelengths=np.array(wavelengths)[0],
+                    total_optical_depth=np.array(total_optical_depth),
+                    absorption_coefficients=np.array(
                         absorption_coefficients),
-                    scattering_coefficients=np.squeeze(
+                    scattering_coefficients=np.array(
                         scattering_coefficients),
-                    scattering_scaling_factors=np.squeeze(
+                    scattering_scaling_factors=np.array(
                         scattering_scaling_factors),
-                    phase_moments=np.squeeze(phase_moments))
+                    phase_moments=phase_moments)
 
         return iops
 
