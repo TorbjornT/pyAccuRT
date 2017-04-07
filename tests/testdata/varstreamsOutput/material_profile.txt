@@ -1,0 +1,70 @@
+Number of Runs: 2
+Materials with optical properties at reference wavelength 500 nm.
+
+Data format:
+(1) Material name
+(2) Concentration/occupied volume/amount (type*)
+(3) Optical depth (4) Single-scattering albedo (5) Asymmetry factor
+(6) Absorption optical depth     (7) Scattering optical depth
+(8) Absorption coefficient [1/m] (9) Scattering coefficient [1/m]
+(10) Delta-fit scattering scaling factor
+* sf = scaling factor, vf = volume fraction
+
+runNo: 0
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+Layer 1:
+ Vacuum
+  1 (sf) 
+  0  -nan  0
+  0  0
+  0  0  
+  1
+Bottom depth at 100000.0000 [m]
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Layer 2:
+ Pure water 
+  1 (vf) 
+  0.2363  0.1216  0
+  0.2075  0.02872
+  0.02075  0.002872  
+  1
+Bottom depth at 100010.0000 [m]
+-------------------------------------------------------------
+Layer 3:
+ Pure water 
+  1 (vf) 
+  0.2363  0.1216  0
+  0.2075  0.02872
+  0.02075  0.002872  
+  1
+Bottom depth at 100020.0000 [m]
+=============================================================
+runNo: 1
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+Layer 1:
+ Vacuum
+  1 (sf) 
+  0  -nan  0
+  0  0
+  0  0  
+  1
+Bottom depth at 100000.0000 [m]
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Layer 2:
+ Pure water 
+  1 (vf) 
+  0.2363  0.1216  0
+  0.2075  0.02872
+  0.02075  0.002872  
+  1
+Bottom depth at 100010.0000 [m]
+-------------------------------------------------------------
+Layer 3:
+ Pure water 
+  1 (vf) 
+  0.2363  0.1216  0
+  0.2075  0.02872
+  0.02075  0.002872  
+  1
+Bottom depth at 100020.0000 [m]
+=============================================================

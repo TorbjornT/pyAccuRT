@@ -1,0 +1,6 @@
+1
+Wavelength [nm]  Refractive index of lower slab
+400.00           1.34978
+500.00           1.33943
+600.00           1.33309
+700.00           1.32876
