@@ -526,34 +526,34 @@ class ReadART(object):
                 np.log(self.downdata[:-1, :, :]/self.downdata[1:, :, :])
         return diffuse_att_coeff
 
-def plot(d, profile=False, run=1, direction='down', ax=None):
-    '''Plots data from one of the runs, either as a vertical profile or
-    as spectra. Either upwelling or downwelling irradiance.'''
-    if ax is None:
-        _, ax = plt.subplots()
+    def plot(d, profile=False, run=1, direction='down', ax=None):
+        '''Plots data from one of the runs, either as a vertical profile or
+        as spectra. Either upwelling or downwelling irradiance.'''
+        if ax is None:
+            _, ax = plt.subplots()
 
-    if direction == 'up':
-        data = d.updata[:, :, run-1]
-    elif direction == 'down':
-        data = d.downdata[:, :, run-1]
+        if direction == 'up':
+            data = d.updata[:, :, run-1]
+        elif direction == 'down':
+            data = d.downdata[:, :, run-1]
 
-    if profile:
-        ax.plot(data, d.depths)
-        ax.set_ylabel('Depth below TOA [m]')
-        ax.set_xlabel('Irradiance [W/m2]')
-        ax.invert_yaxis()
-        ax.legend([str(l) for l in d.wavelengths],
-                  loc='best',
-                  title='Wavelength [nm]')
-    else:
-        ax.plot(d.wavelengths, data.T)
-        ax.set_xlabel('Wavelength [nm]')
-        ax.set_ylabel('Irradiance [W/m2]')
-        ax.legend([str(l) for l in d.depths],
-                  loc='best',
-                  title='Depth below TOA [m]')
+        if profile:
+            ax.plot(data, d.depths)
+            ax.set_ylabel('Depth below TOA [m]')
+            ax.set_xlabel('Irradiance [W/m2]')
+            ax.invert_yaxis()
+            ax.legend([str(l) for l in d.wavelengths],
+                      loc='best',
+                      title='Wavelength [nm]')
+        else:
+            ax.plot(d.wavelengths, data.T)
+            ax.set_xlabel('Wavelength [nm]')
+            ax.set_ylabel('Irradiance [W/m2]')
+            ax.legend([str(l) for l in d.depths],
+                      loc='best',
+                      title='Depth below TOA [m]')
 
-    return ax
+        return ax
 
     def plot_iops(d,run=0,wl=None,wl_index=0,z=None,z_index=0):
         '''
