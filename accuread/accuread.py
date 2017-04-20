@@ -526,9 +526,10 @@ class ReadART(object):
                 np.log(self.downdata[:-1, :, :]/self.downdata[1:, :, :])
         return diffuse_att_coeff
 
-    def plot(d, profile=False, run=1, direction='down', ax=None):
-        '''Plots data from one of the runs, either as a vertical profile or
-        as spectra. Either upwelling or downwelling irradiance.'''
+    def plot(self, profile=False, run=0, direction='down',
+             ax=None, kind='cosine'):
+        '''Plots irradiance from one of the runs, either as a vertical profile
+        or as spectra. Either upwelling or downwelling irradiance.'''
         if ax is None:
             _, ax = plt.subplots()
 
@@ -560,39 +561,41 @@ class ReadART(object):
             ax.set_ylabel('Depth below TOA [m]')
             ax.set_xlabel('Irradiance [W/m2]')
             ax.invert_yaxis()
-            ax.legend([str(l) for l in d.wavelengths],
+            ax.legend([str(l) for l in self.wavelengths],
                       loc='best',
                       title='Wavelength [nm]')
         else:
-            ax.plot(d.wavelengths, data.T)
+            ax.plot(self.wavelengths, data.T)
             ax.set_xlabel('Wavelength [nm]')
             ax.set_ylabel('Irradiance [W/m2]')
-            ax.legend([str(l) for l in d.depths],
+            ax.legend([str(l) for l in self.depths],
                       loc='best',
                       title='Depth below TOA [m]')
 
         return ax
 
-    def plot_iops(d,run=0,wl=None,wl_index=0,z=None,z_index=0):
+    def plot_iops(self,run=0,wl=None,wl_index=0,z=None,z_index=0):
         '''
         z corresponds to layer depth.
         '''
+        if not self.has_iops:
+            raise AttributeError(('IOPs not available, you need iops=True'))
         if wl is not None:
-            wl_index = np.argmin(np.abs(d.wavelengths-wl))
+            wl_index = np.argmin(np.abs(self.wavelengths-wl))
         if (wl is None) and (wl_index is None):
             wl_index = 0
         if z is not None:
-            z_index = np.argmin(np.abs(d.depths-z))
+            z_index = np.argmin(np.abs(self.depths-z))
         if (z is None) and (z_index is None):
             z_index = 0
-        wl = d.wavelengths
-        abs_coeff = d.iops['absorption_coefficients'][run,z_index,:]
-        scat_coeff_scaled = d.iops['scattering_coefficients'][run,z_index,:]
-        sf = d.iops['scattering_scaling_factors'][run,z_index,:]
-        if isinstance(d.iops['phase_moments'],list):
-            g_scaled = d.iops['phase_moments'][run][z_index,:,1]
+        wl = self.wavelengths
+        abs_coeff = self.iops['absorption_coefficients'][run,z_index,:]
+        scat_coeff_scaled = self.iops['scattering_coefficients'][run,z_index,:]
+        sf = self.iops['scattering_scaling_factors'][run,z_index,:]
+        if isinstance(self.iops['phase_moments'],list):
+            g_scaled = self.iops['phase_moments'][run][z_index,:,1]
         else:
-            g_scaled = d.iops['phase_moments'][run,z_index,:,1]
+            g_scaled = self.iops['phase_moments'][run,z_index,:,1]
         
 
         scat_coeff_unscaled = scat_coeff_scaled/sf
@@ -646,24 +649,27 @@ class ReadART(object):
         return ((a, b), (g, ssa))
 
 
-    def radiance_contour(d,run=0,wl=None,wl_index=None,z=None,z_index=None):
+    def radiance_contour(self,run=0,wl=None,wl_index=None,z=None,z_index=None):
         '''
         z corresponds to detector depth.
         '''
+        if not self.has_radiance:
+            raise AttributeError(
+                ('Radiance not available, you need radiance=True'))
         if wl is not None:
-            wl_index = np.argmin(np.abs(d.wavelengths-wl))
+            wl_index = np.argmin(np.abs(self.wavelengths-wl))
         if (wl is None) and (wl_index is None):
             wl_index = 0
         if z is not None:
-            z_index = np.argmin(np.abs(d.depths-z))
+            z_index = np.argmin(np.abs(self.depths-z))
         if (z is None) and (z_index is None):
             z_index = 0
 
-        az = np.hstack((-d.azimuthangles[::-1],d.azimuthangles))
-        pol = d.polarangles
+        az = np.hstack((-self.azimuthangles[::-1],self.azimuthangles))
+        pol = self.polarangles
         rad = np.hstack((
-            d.radiance[z_index,wl_index,:,::-1,run],
-            d.radiance[z_index,wl_index,:,:,run]
+            self.radiance[z_index,wl_index,:,::-1,run],
+            self.radiance[z_index,wl_index,:,:,run]
             ))
 
         n_ind = np.where(pol>=90)[0]
@@ -683,7 +689,7 @@ class ReadART(object):
         zenith.set_title('Upward radiance')
 
         fig.suptitle('Run {0}, $\lambda = {1}$ nm, $z={2}$ nm'.format(
-            run,d.wavelengths[wl_index],d.depths[z_index]))
+            run,self.wavelengths[wl_index],self.depths[z_index]))
 
         c1 = fig.colorbar(r1,ax=nadir,orientation='horizontal')
         c2 = fig.colorbar(r2,ax=zenith,orientation='horizontal')
