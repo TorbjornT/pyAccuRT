@@ -533,12 +533,30 @@ class ReadART(object):
             _, ax = plt.subplots()
 
         if direction == 'up':
-            data = d.updata[:, :, run-1]
+            if kind == 'cosine':
+                data = self.updata[:, :, run]
+            elif kind == 'sine':
+                data = self.sine_up[:, :, run]
+            elif kind == 'scalar':
+                data = self.scalar_up[:, :, run]
+            elif kind == 'direct':
+                data = self.direct_up[:, :, run]
+            elif kind == 'diffuse':
+                data = self.diffuse_up[:, :, run]
         elif direction == 'down':
-            data = d.downdata[:, :, run-1]
+            if kind == 'cosine':
+                data = self.downdata[:, :, run]
+            elif kind == 'sine':
+                data = self.sine_down[:, :, run]
+            elif kind == 'scalar':
+                data = self.scalar_down[:, :, run]
+            elif kind == 'direct':
+                data = self.direct_down[:, :, run]
+            elif kind == 'diffuse':
+                data = self.diffuse_down[:, :, run]
 
         if profile:
-            ax.plot(data, d.depths)
+            ax.plot(data, self.depths)
             ax.set_ylabel('Depth below TOA [m]')
             ax.set_xlabel('Irradiance [W/m2]')
             ax.invert_yaxis()
