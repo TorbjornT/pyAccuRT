@@ -1,5 +1,5 @@
 '''
-Class for doing stuff with output from AccuRT.
+Proviedes ReadART class for doing stuff with output from AccuRT.
 '''
 
 import os
@@ -19,42 +19,47 @@ class ReadART(object):
     Assumes that the number of detector depths and wavelengths
     does *not* change when using repeated runs.
 
-    Positional argument:
+    Args
+    ----
 
-    expname -- Name of the main config file.
+    expname : string
+        Name of the main config file.
 
-    Keyword arguments:
+    basefolder : string, optional
+        Folder where the main configfile is located, default is './'.
+        
+    cosine : bool { True, False }
+        If True (which is default), read in the total cosine irradiance.
 
-    basefolder -- Folder where the main configfile is located.
-        Default './'.
+    diffuse : bool { False, True }
+        If True, read in the diffuse cosine irradiance.
+        
+    direct : bool { False, True }
+        If True, read in the direct cosine irradiance.
+        
+    runvarfile : string or iterable 
+        A string should be a valid filename for a file that can be read
+        with np.loadtxt, containing the variable for repeated runs.
+        If list or array-like, turned into array.
 
-    cosine -- Boolean. If True (which is default), read in the
-        total cosine irradiance.
+    scalar : bool { False, True }
+        If True, read in total scalar irradiance.
+        
+    sine : bool { False, True }
+        If True, read in total sine weighted irradiance.
+        
+    radiance : bool { False, True }
+        If True, read radiance.
+        
+    iops : bool { False, True }
+        If True, read iops-file into a dict.
+        
+    material_profile : bool { False, True }
+        If True, read material_profile-file.
 
-    diffuse -- Boolean. If True, read in the diffuse cosine irradiance.
-        Default False.
-
-    direct -- Boolean. If True, read in the direct cosine irradiance.
-        Default False.
-
-    runvarfile -- Filename or list-like structure holding indices for repeated
-        runs. Default None.
-
-    scalar -- Boolean. If True, read in total scalar irradiance
-        Default False.
-
-    sine -- Boolean. If True, read in total sine weighted irradiance
-        Default False.
-
-    radiance -- Boolean. If True, read radiance.
-        Default False.
-
-    iops -- Boolean. If True, read iops-file into a dict.
-        Default False.
-
-    material_profile -- Boolean. If True, read material_profile-file.
-        Default False.
-
+    Returns
+    -------
+        ReadART instance
 
      Example:
      >>> import accuread as ar
