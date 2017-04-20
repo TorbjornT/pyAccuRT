@@ -574,7 +574,7 @@ class ReadART(object):
 
         return ax
 
-    def plot_iops(self,run=0,wl=None,wl_index=0,z=None,z_index=0):
+    def plot_iops(self,run=0,wl=None,wl_index=None,z=None,z_index=None):
         '''
         z corresponds to layer depth.
         '''
@@ -585,7 +585,7 @@ class ReadART(object):
         if (wl is None) and (wl_index is None):
             wl_index = 0
         if z is not None:
-            z_index = np.argmin(np.abs(self.depths-z))
+            z_index = np.searchsorted(self.iops['layer_depths'][run],z)
         if (z is None) and (z_index is None):
             z_index = 0
         wl = self.wavelengths
@@ -644,7 +644,18 @@ class ReadART(object):
         h2, l2 = ssau.get_legend_handles_labels()
         ssau.legend(h1+h2,l1+l2,frameon=False,title='Single scattering albedo')
 
+        fig.suptitle(
+            'Run {0}, layer {1} (bottom at {2}), $\lambda = {3}$ nm'.format(
+            run,z_index,self.iops['layer_depths'][run,z_index],
+            self.wavelengths[wl_index]))
+
         fig.tight_layout()
+        for ax in [a,b,bu]:
+            p = ax.get_position()
+            ax.set_position([p.x0,p.y0-0.02,p.width,p.height*0.95])
+        for ax in [g,ssa,ssau]:
+            p = ax.get_position()
+            ax.set_position([p.x0,p.y0,p.width,p.height*0.95])
 
         return ((a, b), (g, ssa))
 
