@@ -140,7 +140,7 @@ def read_iops(filename):
             if eq_npm:
                 phase_moments = np.array(phase_moments)
         else:
-            phase_moments = phase_moments[0]
+            phase_moments = np.array(phase_moments)
 
 
         iops = dict(nruns=nruns,
