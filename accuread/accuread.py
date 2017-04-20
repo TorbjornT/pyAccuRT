@@ -12,7 +12,6 @@ from scipy.ndimage.filters import gaussian_filter1d as gaussf
 from .file_reading import read_irradiance, read_radiance, \
     read_material_profile, read_iops
 
-
 class ReadART(object):
     '''Reads the output text files from AccuRT, and includes methods for
     calculating albedo and transmittance, and for simple plotting.
@@ -378,34 +377,6 @@ class ReadART(object):
 
             outfile.close()
 
-    def plot(self, profile=False, run=1, direction='down', ax=None):
-        '''Plots data from one of the runs, either as a vertical profile or
-        as spectra. Either upwelling or downwelling irradiance.'''
-        if ax is None:
-            _, ax = plt.subplots()
-
-        if direction == 'up':
-            data = self.updata[:, :, run-1]
-        elif direction == 'down':
-            data = self.downdata[:, :, run-1]
-
-        if profile:
-            ax.plot(data, self.depths)
-            ax.set_ylabel('Depth below TOA [m]')
-            ax.set_xlabel('Irradiance [W/m2]')
-            ax.invert_yaxis()
-            ax.legend([str(l) for l in self.wavelengths],
-                      loc='best',
-                      title='Wavelength [nm]')
-        else:
-            ax.plot(self.wavelengths, data.T)
-            ax.set_xlabel('Wavelength [nm]')
-            ax.set_ylabel('Irradiance [W/m2]')
-            ax.legend([str(l) for l in self.depths],
-                      loc='best',
-                      title='Depth below TOA [m]')
-
-        return ax
 
     def albedo(self, layer, integrated=False):
         '''Calculate albedo, return array.'''
@@ -554,3 +525,161 @@ class ReadART(object):
             diffuse_att_coeff = 1/delta_z * \
                 np.log(self.downdata[:-1, :, :]/self.downdata[1:, :, :])
         return diffuse_att_coeff
+
+def plot(d, profile=False, run=1, direction='down', ax=None):
+    '''Plots data from one of the runs, either as a vertical profile or
+    as spectra. Either upwelling or downwelling irradiance.'''
+    if ax is None:
+        _, ax = plt.subplots()
+
+    if direction == 'up':
+        data = d.updata[:, :, run-1]
+    elif direction == 'down':
+        data = d.downdata[:, :, run-1]
+
+    if profile:
+        ax.plot(data, d.depths)
+        ax.set_ylabel('Depth below TOA [m]')
+        ax.set_xlabel('Irradiance [W/m2]')
+        ax.invert_yaxis()
+        ax.legend([str(l) for l in d.wavelengths],
+                  loc='best',
+                  title='Wavelength [nm]')
+    else:
+        ax.plot(d.wavelengths, data.T)
+        ax.set_xlabel('Wavelength [nm]')
+        ax.set_ylabel('Irradiance [W/m2]')
+        ax.legend([str(l) for l in d.depths],
+                  loc='best',
+                  title='Depth below TOA [m]')
+
+    return ax
+
+    def plot_iops(d,run=0,wl=None,wl_index=0,z=None,z_index=0):
+        '''
+        z corresponds to layer depth.
+        '''
+        if wl is not None:
+            wl_index = np.argmin(np.abs(d.wavelengths-wl))
+        if (wl is None) and (wl_index is None):
+            wl_index = 0
+        if z is not None:
+            z_index = np.argmin(np.abs(d.depths-z))
+        if (z is None) and (z_index is None):
+            z_index = 0
+        wl = d.wavelengths
+        abs_coeff = d.iops['absorption_coefficients'][run,z_index,:]
+        scat_coeff_scaled = d.iops['scattering_coefficients'][run,z_index,:]
+        sf = d.iops['scattering_scaling_factors'][run,z_index,:]
+        if isinstance(d.iops['phase_moments'],list):
+            g_scaled = d.iops['phase_moments'][run][z_index,:,1]
+        else:
+            g_scaled = d.iops['phase_moments'][run,z_index,:,1]
+        
+
+        scat_coeff_unscaled = scat_coeff_scaled/sf
+        g_unscaled = (g_scaled-1)*sf + 1
+
+        ssa_scaled = scat_coeff_scaled / ( abs_coeff + scat_coeff_scaled)
+        ssa_unscaled = scat_coeff_unscaled / ( abs_coeff + scat_coeff_unscaled)
+
+        fig, ((a, b), (g, ssa)) = plt.subplots(
+            ncols=2, nrows=2, sharex=True,figsize=(10,7)
+            )
+
+        a.plot(wl, abs_coeff)
+        a.set_ylabel('Absorption coefficient [$\mathrm{m}^{-1}$]')
+
+        b.plot(wl, scat_coeff_scaled,label='Scaled (left ordinate)')
+        b.set_ylabel('Scaled $b$ [$\mathrm{m}^{-1}$]')
+
+        bu = b.twinx()
+        bu.plot(wl, scat_coeff_unscaled,
+            linestyle='--',label='Unscaled (right ordinate)')
+        bu.set_ylabel('Unscaled $b$ [$\mathrm{m}^{-1}$]')
+        bu.get_yaxis().get_major_formatter().set_useOffset(False)
+
+        h1, l1 = b.get_legend_handles_labels()
+        h2, l2 = bu.get_legend_handles_labels()
+        bu.legend(h1+h2,l1+l2,frameon=False,title='Scattering coefficient')
+
+        g.plot(wl, g_scaled, label='Scaled $g$')
+        g.plot(wl, g_unscaled, label='Unscaled $g$')
+        g.plot(wl, sf,label='Scattering scaling factor')
+        g.set_xlabel('Wavelength [nm]')
+        g.legend(frameon=False)
+
+        ssa.plot(wl, ssa_scaled,label='Scaled (left ordinate)')
+        ssa.set_ylabel('Scaled SSA')
+        ssa.set_xlabel('Wavelength [nm]')
+
+        ssau = ssa.twinx()
+        ssau.plot(wl, ssa_unscaled,
+            linestyle='--',label='Unscaled (right ordinate)')
+        ssau.set_ylabel('Unscaled SSA')
+        ssau.get_yaxis().get_major_formatter().set_useOffset(False)
+
+        h1, l1 = ssa.get_legend_handles_labels()
+        h2, l2 = ssau.get_legend_handles_labels()
+        ssau.legend(h1+h2,l1+l2,frameon=False,title='Single scattering albedo')
+
+        fig.tight_layout()
+
+        return ((a, b), (g, ssa))
+
+
+    def radiance_contour(d,run=0,wl=None,wl_index=None,z=None,z_index=None):
+        '''
+        z corresponds to detector depth.
+        '''
+        if wl is not None:
+            wl_index = np.argmin(np.abs(d.wavelengths-wl))
+        if (wl is None) and (wl_index is None):
+            wl_index = 0
+        if z is not None:
+            z_index = np.argmin(np.abs(d.depths-z))
+        if (z is None) and (z_index is None):
+            z_index = 0
+
+        az = np.hstack((-d.azimuthangles[::-1],d.azimuthangles))
+        pol = d.polarangles
+        rad = np.hstack((
+            d.radiance[z_index,wl_index,:,::-1,run],
+            d.radiance[z_index,wl_index,:,:,run]
+            ))
+
+        n_ind = np.where(pol>=90)[0]
+        z_ind = np.where(pol<=90)[0]
+        n_rad = rad[n_ind,:]
+        z_rad = rad[z_ind,:]
+        fig,(nadir,zenith) = plt.subplots(
+            ncols=2,
+            figsize=(10,5),
+            subplot_kw=dict(projection='polar')
+            )
+
+
+        r1 = nadir.contourf(np.radians(az),np.abs(pol[n_ind]-180),n_rad)
+        r2 = zenith.contourf(np.radians(az),pol[z_ind],z_rad)
+        nadir.set_title('Downward radiance')
+        zenith.set_title('Upward radiance')
+
+        fig.suptitle('Run {0}, $\lambda = {1}$ nm, $z={2}$ nm'.format(
+            run,d.wavelengths[wl_index],d.depths[z_index]))
+
+        c1 = fig.colorbar(r1,ax=nadir,orientation='horizontal')
+        c2 = fig.colorbar(r2,ax=zenith,orientation='horizontal')
+        for c in [c1,c2]:
+            c.set_label(
+            '$\mathrm{W}\,\mathrm{m}^{-2}\,\mathrm{nm}^{-1}\,\mathrm{sr}^{-1}$'
+            )
+
+
+        fig.tight_layout()
+        for ax in [nadir,zenith]:
+            p = ax.get_position()
+            ax.set_position([p.x0,p.y0-0.05,p.width,p.height])
+            ax.set_yticks(np.arange(0,91,30))
+
+        plt.show()
+        return ax
