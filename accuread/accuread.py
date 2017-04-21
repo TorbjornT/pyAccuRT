@@ -705,7 +705,7 @@ class ReadART(object):
         nadir.set_title('Downward radiance')
         zenith.set_title('Upward radiance')
 
-        fig.suptitle('Run {0}, $\lambda = {1}$ nm, $z={2}$ nm'.format(
+        fig.suptitle('Run {0}, $\lambda = {1}$ nm, $z={2:.3f}$ m'.format(
             run,self.wavelengths[wl_index],self.depths[z_index]))
 
         c1 = fig.colorbar(r1,ax=nadir,orientation='horizontal')
