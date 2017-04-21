@@ -665,7 +665,7 @@ class ReadART(object):
         return ((a, b), (g, ssa))
 
 
-    def radiance_contour(self,run=0,wl=None,wl_index=None,z=None,z_index=None):
+    def plot_rad_contour(self,run=0,wl=None,wl_index=None,z=None,z_index=None):
         '''
         z corresponds to detector depth.
         '''
