@@ -690,6 +690,9 @@ class ReadART(object):
                 self.radiance[z_index, wl_index, :, ::-1, run],
                 self.radiance[z_index, wl_index, :, :, run]
                 ))
+        else:
+            az = self.azimuthangles
+            rad = self.radiance[z_index. wl_index, :, :, run]
 
         n_ind = np.where(pol >= 90)[0]
         z_ind = np.where(pol <= 90)[0]
