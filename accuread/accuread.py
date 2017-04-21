@@ -681,12 +681,13 @@ class ReadART(object):
         if (z is None) and (z_index is None):
             z_index = 0
 
-        az = np.hstack((-self.azimuthangles[::-1],self.azimuthangles))
         pol = self.polarangles
-        rad = np.hstack((
-            self.radiance[z_index,wl_index,:,::-1,run],
-            self.radiance[z_index,wl_index,:,:,run]
-            ))
+        if self.azimuthangles.min()>=0 and self.azimuthangles.max()<=180:
+            az = np.hstack((-self.azimuthangles[::-1],self.azimuthangles))        
+            rad = np.hstack((
+                self.radiance[z_index,wl_index,:,::-1,run],
+                self.radiance[z_index,wl_index,:,:,run]
+                ))
 
         n_ind = np.where(pol>=90)[0]
         z_ind = np.where(pol<=90)[0]
