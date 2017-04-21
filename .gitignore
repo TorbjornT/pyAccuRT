@@ -11,6 +11,8 @@ build/
 /tests/testdata/nocosineMaterials/
 /tests/testdata/varstreams
 /tests/testdata/varstreamsMaterials/
+/tests/testdata/radiop
+/tests/testdata/radiopMaterials/
 /tests/testdata/gasIOP_srf.txt
 *.directory
 /tests/testdata/*.m
