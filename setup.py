@@ -1,7 +1,7 @@
 from distutils.core import setup
 
 setup(name='pyAccuRT',
-      version='0.9',
+      version='1.0',
       description='Reading and plotting results from AccuRT',
       author='Torbjoern Taskjelle',
       author_email='totaskj@gmail.com',
