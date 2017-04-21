@@ -1,0 +1,233 @@
+Number of Runs: 1
+Materials with optical properties at reference wavelength 500 nm.
+
+Data format:
+(1) Material name
+(2) Concentration/occupied volume/amount (type*)
+(3) Optical depth (4) Single-scattering albedo (5) Asymmetry factor
+(6) Absorption optical depth     (7) Scattering optical depth
+(8) Absorption coefficient [1/m] (9) Scattering coefficient [1/m]
+(10) Delta-fit scattering scaling factor
+* sf = scaling factor, vf = volume fraction
+
+runNo: 0
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+Layer 1:
+ Earth atmospheric gases 
+  1 (sf) 
+  7.807e-06  0.9619  0
+  2.971e-07  7.51e-06
+  9.903e-12  2.503e-10  
+  1
+Bottom depth at 30000.0000 [m]
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+Layer 2:
+ Earth atmospheric gases 
+  1 (sf) 
+  0.0001382  0.7718  0
+  3.153e-05  0.0001066
+  1.577e-09  5.332e-09  
+  1
+Bottom depth at 50000.0000 [m]
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+Layer 3:
+ Earth atmospheric gases 
+  1 (sf) 
+  0.0005737  0.5193  0
+  0.0002758  0.0002979
+  2.758e-08  2.979e-08  
+  1
+Bottom depth at 60000.0000 [m]
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+Layer 4:
+ Earth atmospheric gases 
+  1 (sf) 
+  0.002841  0.4537  0
+  0.001552  0.001289
+  1.552e-07  1.289e-07  
+  1
+Bottom depth at 70000.0000 [m]
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+Layer 5:
+ Earth atmospheric gases 
+  1 (sf) 
+  0.004811  0.5252  0
+  0.002285  0.002527
+  3.808e-07  4.211e-07  
+  1
+Bottom depth at 76000.0000 [m]
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+Layer 6:
+ Earth atmospheric gases 
+  1 (sf) 
+  0.005685  0.6387  0
+  0.002054  0.003631
+  5.135e-07  9.079e-07  
+  1
+Bottom depth at 80000.0000 [m]
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+Layer 7:
+ Earth atmospheric gases 
+  1 (sf) 
+  0.008553  0.7999  0
+  0.001711  0.006842
+  4.278e-07  1.711e-06  
+  1
+Bottom depth at 84000.0000 [m]
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+Layer 8:
+ Earth atmospheric gases 
+  1 (sf) 
+  0.01388  0.9236  0
+  0.001061  0.01282
+  2.654e-07  3.206e-06  
+  1
+Bottom depth at 88000.0000 [m]
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+Layer 9:
+ Earth atmospheric gases 
+  1 (sf) 
+  0.01038  0.9668  0
+  0.0003447  0.01003
+  1.724e-07  5.016e-06  
+  1
+Bottom depth at 90000.0000 [m]
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+Layer 10:
+ Earth atmospheric gases 
+  1 (sf) 
+  0.01315  0.9852  0
+  0.0001941  0.01295
+  9.707e-08  6.476e-06  
+  1
+Bottom depth at 92000.0000 [m]
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+Layer 11:
+ Earth atmospheric gases 
+  1 (sf) 
+  0.01649  0.9919  0
+  0.0001336  0.01635
+  6.678e-08  8.177e-06  
+  1
+Bottom depth at 94000.0000 [m]
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+Layer 12:
+ Earth atmospheric gases 
+  1 (sf) 
+  0.02053  0.9939  0
+  0.0001255  0.02041
+  6.277e-08  1.02e-05  
+  1
+Bottom depth at 96000.0000 [m]
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+Layer 13:
+ Earth atmospheric gases 
+  1 (sf) 
+  0.02533  0.9946  0
+  0.0001373  0.02519
+  6.863e-08  1.26e-05  
+  1
+Bottom depth at 98000.0000 [m]
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+Layer 14:
+ Earth atmospheric gases 
+  1 (sf) 
+  0.03095  0.9952  0
+  0.000148  0.0308
+  7.402e-08  1.54e-05  
+  1
+ Aerosols fine mode
+  1.4e-11 (vf) 
+  0.2122  0.9483  0.6268
+  0.01097  0.2012
+  5.485e-06  0.0001006  
+  1.002
+ Aerosols coarse mode
+  1.4e-11 (vf) 
+  0.01826  1  0.6021
+  8.36e-08  0.01826
+  4.18e-11  9.13e-06  
+  0.6381
+Bottom depth at 100000.0000 [m]
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Layer 15:
+ Ice brines
+  0.05 (vf) 
+  8.367  0.9999  0.8537
+  0.0005358  8.366
+  0.001072  16.73  
+  0.02231
+ Ice impurity brines
+  1e-08 (vf) 
+  0.05127  1.915e-06  0.0003127
+  0.05127  9.818e-08
+  0.1025  1.964e-07  
+  1
+ Ice bubbles
+  0.01 (vf) 
+  66.52  1  0.8364
+  0  66.52
+  0  133  
+  0.887
+ Ice pure ice
+  0.94 (vf) 
+  0.008306  0.1625  0
+  0.006956  0.00135
+  0.01391  0.0027  
+  1
+ Pure water 
+  1 (vf) 
+  0.01181  0.1216  0
+  0.01038  0.001436
+  0.02075  0.002872  
+  1
+ Water Impurity CCRR 
+  1 (sf) 
+  0.06272  0.7231  0.8402
+  0.01737  0.04535
+  0.03474  0.0907  
+  0.2619
+Bottom depth at 100000.5000 [m]
+-------------------------------------------------------------
+Layer 16:
+ Ice brines
+  0.01 (vf) 
+  1.116  0.9999  0.8537
+  0.0001072  1.115
+  0.0002143  2.231  
+  0.02231
+ Ice impurity brines
+  1e-07 (vf) 
+  0.5127  1.915e-06  0.0003127
+  0.5127  9.818e-07
+  1.025  1.964e-06  
+  1
+ Ice bubbles
+  0.005 (vf) 
+  16.63  1  0.8364
+  0  16.63
+  0  33.26  
+  0.887
+ Ice pure ice
+  0.985 (vf) 
+  0.008704  0.1625  0
+  0.007289  0.001415
+  0.01458  0.002829  
+  1
+ Pure water 
+  1 (vf) 
+  0.01181  0.1216  0
+  0.01038  0.001436
+  0.02075  0.002872  
+  1
+Bottom depth at 100001.0000 [m]
+-------------------------------------------------------------
+Layer 17:
+ Pure water 
+  1 (vf) 
+  2.339  0.1216  0
+  2.055  0.2843
+  0.02075  0.002872  
+  1
+Bottom depth at 100100.0000 [m]
+=============================================================
