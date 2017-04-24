@@ -5,7 +5,7 @@ from accuread import ReadART
 class TestAccuAlbedoTransmittance(unittest.TestCase):
 
     def setUp(self):
-        self.PA = ReadART('demo1',basefolder='tests/testdata')
+        self.PA = ReadART('demo1',basefolder='accuread/tests/testdata')
         self.albedo = self.PA.albedo(layer=1)
         self.integrated_albedo = self.PA.albedo(layer=1,integrated=True)
         self.transmittance = self.PA.transmittance(layers=(1,2))

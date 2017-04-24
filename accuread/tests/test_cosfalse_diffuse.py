@@ -5,7 +5,7 @@ from accuread import ReadART
 class TestAccuRead(unittest.TestCase):
 
     def setUp(self):
-        self.PA = ReadART('demo1',basefolder='tests/testdata',
+        self.PA = ReadART('demo1',basefolder='accuread/tests/testdata',
             cosine=False,diffuse=True,
             runvarfile='sza.txt')
 

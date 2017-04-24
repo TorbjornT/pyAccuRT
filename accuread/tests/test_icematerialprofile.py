@@ -5,7 +5,7 @@ from accuread import ReadART
 class TestMaterialProfileWithIce(unittest.TestCase):
 
     def setUp(self):
-        self.PA = ReadART('materialprofileice',basefolder='tests/testdata',
+        self.PA = ReadART('materialprofileice',basefolder='accuread/tests/testdata',
             material_profile=True)
         self.MP = self.PA.material_profile
 

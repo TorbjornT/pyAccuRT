@@ -5,7 +5,7 @@ from accuread import ReadART
 class TestMaterialProfile(unittest.TestCase):
 
     def setUp(self):
-        self.PA = ReadART('demo1',basefolder='tests/testdata',
+        self.PA = ReadART('demo1',basefolder='accuread/tests/testdata',
             material_profile=True,runvarfile='sza.txt')
         self.MP = self.PA.material_profile
 
